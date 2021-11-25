@@ -213,8 +213,8 @@ msgid "Last Block"
 msgstr "直前のブロック"
 
 #: public/views/status.html
-msgid "Last Block Hash (Pirated)"
-msgstr "直前のブロックのハッシュ値 (Pirated)"
+msgid "Last Block Hash (Komodod)"
+msgstr "直前のブロックのハッシュ値 (Komodod)"
 
 #: public/views/index.html
 msgid "Latest Blocks"

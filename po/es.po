@@ -195,8 +195,8 @@ msgid "Last Block"
 msgstr "Último Bloque"
 
 #: public/views/status.html
-msgid "Last Block Hash (Pirated)"
-msgstr "Último Bloque Hash (Pirated)"
+msgid "Last Block Hash (Komodod)"
+msgstr "Último Bloque Hash (Komodod)"
 
 #: public/views/index.html
 msgid "Latest Blocks"

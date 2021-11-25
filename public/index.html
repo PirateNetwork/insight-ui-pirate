@@ -3,18 +3,47 @@
 <head>
   <base href="/" />
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<meta name="fragment" content="!">
-	<title data-ng-if="currency.testnet" data-ng-bind="$root.title + $root.titleDetail + ' | Testnet Insight'">Komodo Explorer</title>
-	<title data-ng-if="!currency.testnet" data-ng-bind="$root.title + $root.titleDetail + ' | Insight'">Komodo Explorer</title>
-	<meta name="keywords" content="pirate, transactions, blocks, address, block chain, best block, mining difficulty, hash serialized">
-	<meta data-ng-if="currency.testnet" name="description" content="Komodo Insight. View detailed information on all testnet pirate transactions and block. {{ $root.title + $root.titleDetail }}">
-	<meta data-ng-if="!currency.testnet" name="description" content="Komodo Insight. View detailed information on all pirate transactions and block. {{ $root.title + $root.titleDetail }}">
+	<title data-ng-if="!currency.testnet" data-ng-bind="PIRATE / ARRR | Insight'">PIRATE ARRR Explorer</title>
+	<meta name="keywords" content="pirate, arrr, transactions, blocks, address, block chain, best block, mining difficulty, hash serialized">
+	<meta data-ng-if="currency.testnet" name="description" content="PIRATE Insight Explorer. ">
+	<meta data-ng-if="!currency.testnet" name="description" content="PIRATE Insight Explorer.">
 	<link rel="shortcut icon" href="img/icons/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,400italic">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bai Jamjuree:300,400,500,700,400italic">
 	<link rel="stylesheet" href="css/main.min.css">
+        <link rel="stylesheet" href="https://pirate.black/donate_arrr/donate_arrr.css">
   <link rel="stylesheet" href="css/common.min.css">
+<script src="https://widgets.coingecko.com/coingecko-coin-ticker-widget.js"></script>
+<meta name="theme-color" content="#BB9645">
+
+<style>
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+</style>
+
 </head>
 <body ng-cloak class="ng-cloak">
   <div>
@@ -74,6 +103,7 @@
 	<script src="js/vendors.min.js"></script>
 	<script src="js/angularjs-all.min.js"></script>
 	<script src="js/main.min.js"></script>
+        <script src="https://pirate.black/donate_arrr/donate_arrr.js"></script>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>

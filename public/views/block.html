@@ -53,13 +53,13 @@
           <tr>
             <td><strong translate>Height</strong></td>
             <td class="text-right text-muted">{{block.height}}
-              <span data-ng-show="block.isMainChain" class="text-success">(Mainchain)</span>
+              <span data-ng-show="block.isMainChain" class="text-success">(Mainship)</span>
               <span data-ng-show="!block.isMainChain" class="text-danger"> <span class="glyphicon glyphicon-warning-sign"></span> (Orphaned)</span>
             </td>
           </tr>
           <tr>
             <td><strong translate>Block Reward</strong></td>
-            <td class="text-right text-muted">{{$root.currency.getConvertion(block.reward)}}</td>
+            <td class="text-right text-muted">16</td>
           </tr> 
           <tr>
             <td><strong translate>Timestamp</strong></td>
@@ -71,7 +71,7 @@
               <a href="{{block.poolInfo.url}}" target="_blank" title="{{block.poolInfo.poolName}}">{{block.poolInfo.poolName}}</a>
             </td>
           </tr>
-          <tr>
+<!--          <tr>
             <td><strong>Merkle Root</strong></td>
             <td class="text-right text-muted">
               <div class="ellipsis">
@@ -80,10 +80,11 @@
               </div>
             </td>
           </tr>
-          <tr data-ng-show="block.previousblockhash">
+--><!--          <tr data-ng-show="block.previousblockhash">
             <td><strong translate>Previous Block</strong></td>
             <td class="text-right"><a href="block/{{block.previousblockhash}}">{{block.height-1}}</a></td>
           </tr>
+-->
           </tbody>
         </table>
       </div>
@@ -102,7 +103,7 @@
             <td> <strong translate>Size (bytes)</strong></td>
             <td class="text-right text-muted">{{block.size}}</td>
           </tr>
-          <tr>
+   <!--       <tr>
             <td> <strong translate>Version</strong></td>
             <td class="text-right text-muted">{{block.version}}</td>
           </tr>
@@ -124,7 +125,11 @@
               </div>
             </td>
           </tr>
-          <tr data-ng-show="block.nextblockhash">
+       --> <tr data-ng-show="block.previousblockhash">
+            <td><strong translate>Previous Block</strong></td>
+            <td class="text-right"><a href="block/{{block.previousblockhash}}">{{block.height-1}}</a></td>
+          </tr>
+   <tr data-ng-show="block.nextblockhash">
             <td><strong translate>Next Block</strong></td>
             <td class="text-right"><a href="block/{{block.nextblockhash}}">{{block.height+1}}</a></td>
           </tr>

@@ -63,7 +63,7 @@
         <thead data-ng-include src="'views/includes/infoStatus.html'"></thead>
         <tbody>
           <tr>
-            <td translate>Last Block Hash (Pirated)</td>
+            <td translate>Last Block Hash (Komodod)</td>
             <td class="text-right ellipsis"><a href="block/{{lastblockhash}}">{{lastblockhash}}</a></td>
           </tr>
           <tr>
@@ -91,6 +91,10 @@
           <tr>
             <td translate>Blocks</td>
             <td class="text-right"><a href="block-index/{{info.blocks}}">{{info.blocks}}</a></td>
+          </tr>
+           <tr>
+           <td translate>Last Notarized Height</td>
+            <td class="text-right">{{info.notarized}}</td>
           </tr>
           <tr>
             <td translate>Time Offset</td>

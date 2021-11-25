@@ -126,7 +126,7 @@ angular.module('insight.system').controller('ScannerController',
 
     $modalInstance.opened.then(function() {
       $rootScope.isCollapsed = true;
-
+      
       // Start the scanner
       setTimeout(function() {
         canvas = document.getElementById('qr-canvas');
@@ -142,7 +142,7 @@ angular.module('insight.system').controller('ScannerController',
           canvas.height = 225;
           context.clearRect(0, 0, 300, 225);
 
-          navigator.getUserMedia({video: true}, _successCallback, _videoError);
+          navigator.getUserMedia({video: true}, _successCallback, _videoError); 
         }
       }, 500);
     });

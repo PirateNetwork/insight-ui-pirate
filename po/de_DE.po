@@ -33,7 +33,7 @@ msgstr ""
 "\"_blank\">Open Source Komodo Blockchain Explorer</a> mit vollständigen "
 "REST und Websocket APIs um eigene Wallets oder Applikationen zu "
 "implementieren. Hierbei werden fortschrittlichere Abfragen der Blockchain "
-"ermöglicht, bei denen die RPC des Pirated nicht mehr ausreichen. Der "
+"ermöglicht, bei denen die RPC des Komodod nicht mehr ausreichen. Der "
 "aktuelle <a href=\"https://github.com/piratenetwork/insight-ui-pirate\" target=\"_blank"
 "\">Quellcode</a> ist auf Github zu finden."
 
@@ -94,7 +94,7 @@ msgid ""
 "Can't connect to pirated to get live updates from the p2p network. (Tried "
 "connecting to pirated at {{host}}:{{port}} and failed.)"
 msgstr ""
-"Es ist nicht möglich mit Pirated zu verbinden um live Aktualisierungen vom "
+"Es ist nicht möglich mit Komodod zu verbinden um live Aktualisierungen vom "
 "P2P Netzwerk zu erhalten. (Verbindungsversuch zu pirated an {{host}}:"
 "{{port}} ist fehlgeschlagen.)"
 
@@ -199,8 +199,8 @@ msgid "Last Block"
 msgstr "Letzter Block"
 
 #: public/views/status.html
-msgid "Last Block Hash (Pirated)"
-msgstr "Letzter Hash (Pirated)"
+msgid "Last Block Hash (Komodod)"
+msgstr "Letzter Hash (Komodod)"
 
 #: public/views/index.html
 msgid "Latest Blocks"
