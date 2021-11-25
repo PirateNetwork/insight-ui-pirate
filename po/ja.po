@@ -24,15 +24,15 @@ msgid ""
 "<strong>insight</strong>  is an <a href=\"http://live.insight.is/\" target="
 "\"_blank\">open-source Komodo blockchain explorer</a> with complete REST "
 "and websocket APIs that can be used for writing web wallets and other apps  "
-"that need more advanced blockchain queries than provided by komodod RPC.  "
-"Check out the <a href=\"https://github.com/supernetorg/insight-ui-komodo\" target=\"_blank"
+"that need more advanced blockchain queries than provided by pirated RPC.  "
+"Check out the <a href=\"https://github.com/piratenetwork/insight-ui-pirate\" target=\"_blank"
 "\">source code</a>."
 msgstr ""
-"<strong>insight</strong>は、komodod RPCの提供するものよりも詳細なブロック"
+"<strong>insight</strong>は、pirated RPCの提供するものよりも詳細なブロック"
 "チェインへの問い合わせを必要とするウェブウォレットやその他のアプリを書くのに"
 "使える、完全なRESTおよびwebsocket APIを備えた<a href=\"http://live.insight."
 "is/\" target=\"_blank\">オープンソースのビットコインブロックエクスプローラ</"
-"a>です。<a href=\"https://github.com/supernetorg/insight-ui-komodo\" target=\"_blank\">ソース"
+"a>です。<a href=\"https://github.com/piratenetwork/insight-ui-pirate\" target=\"_blank\">ソース"
 "コード</a>を確認"
 
 #: public/views/index.html
@@ -104,10 +104,10 @@ msgstr "シリアライズ後の容量 (バイト)"
 
 #: public/views/includes/connection.html
 msgid ""
-"Can't connect to komodod to get live updates from the p2p network. (Tried "
-"connecting to komodod at {{host}}:{{port}} and failed.)"
+"Can't connect to pirated to get live updates from the p2p network. (Tried "
+"connecting to pirated at {{host}}:{{port}} and failed.)"
 msgstr ""
-"P2Pネットワークからライブ情報を取得するためにkomododへ接続することができませ"
+"P2Pネットワークからライブ情報を取得するためにpiratedへ接続することができませ"
 "んでした。({{host}}:{{port}} への接続を試みましたが、失敗しました。)"
 
 #: public/views/includes/connection.html
@@ -213,8 +213,8 @@ msgid "Last Block"
 msgstr "直前のブロック"
 
 #: public/views/status.html
-msgid "Last Block Hash (Komodod)"
-msgstr "直前のブロックのハッシュ値 (Komodod)"
+msgid "Last Block Hash (Pirated)"
+msgstr "直前のブロックのハッシュ値 (Pirated)"
 
 #: public/views/index.html
 msgid "Latest Blocks"

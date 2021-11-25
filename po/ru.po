@@ -83,10 +83,10 @@ msgstr "Ошибка подключения к интернет. Пожалуй�
 
 #: public/views/includes/connection.html:9
 msgid ""
-"Can't connect to komodod to get live updates from the p2p network. (Tried "
-"connecting to komodod at {{host}}:{{port}} and failed.)"
+"Can't connect to pirated to get live updates from the p2p network. (Tried "
+"connecting to pirated at {{host}}:{{port}} and failed.)"
 msgstr ""
-"Ошибка подключения к komodod для получения обновлений из сети. (Попытка "
+"Ошибка подключения к pirated для получения обновлений из сети. (Попытка "
 "подключения к {{host}}:{{port}} не удалась.)"
 
 #: public/views/charts.html:8
@@ -205,8 +205,8 @@ msgid "Last Block"
 msgstr "Последний блок"
 
 #: public/views/status.html:66
-msgid "Last Block Hash (Komodod)"
-msgstr "Хеш последнего блока (komodod)"
+msgid "Last Block Hash (Pirated)"
+msgstr "Хеш последнего блока (pirated)"
 
 #: public/views/index.html:12
 msgid "Latest Blocks"

@@ -1,8 +1,8 @@
 {
-  "name": "insight-ui-komodo",
-  "description": "An open-source frontend for the Insight API. The Insight API provides you with a convenient, powerful and simple way to query and broadcast data on the komodo network and build your own services with it.",
+  "name": "insight-ui-pirate",
+  "description": "An open-source frontend for the Insight API. The Insight API provides you with a convenient, powerful and simple way to query and broadcast data on the pirate network and build your own services with it.",
   "version": "0.4.0",
-  "repository": "git+https://git@github.com/DeckerSU/insight-ui-komodo.git",
+  "repository": "git+https://git@github.com/piratenetwork/insight-ui-pirate.git",
   "contributors": [
     {
       "name": "Matias Alejo Garcia",
@@ -30,19 +30,19 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/supernetorg/insight-ui-komodo/issues"
+    "url": "https://github.com/piratenetwork/insight-ui-pirate/issues"
   },
-  "homepage": "https://github.com/supernetorg/insight-ui-komodo",
+  "homepage": "https://github.com/piratenetwork/insight-ui-pirate",
   "license": "MIT",
   "keywords": [
     "insight",
     "blockchain",
     "blockexplorer",
-    "komodo",
+    "pirate",
     "bitcore",
     "front-end"
   ],
-  "bitcoreNode": "bitcore-node-komodo",
+  "bitcoreNode": "bitcore-node-pirate",
   "dependencies": {
   },
   "devDependencies": {
