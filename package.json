@@ -43,19 +43,35 @@
     "front-end"
   ],
   "bitcoreNode": "bitcore-node-pirate",
+  "type": "module",
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
   "dependencies": {
+    "bootstrap": "^3.4.1",
+    "i18next": "^26.3.6",
+    "qr-scanner": "^1.4.2",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-i18next": "^17.0.11",
+    "react-router-dom": "^7.18.2",
+    "recharts": "^3.10.1",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
-    "bower": "~1.2.8",
-    "grunt": "~0.4.2",
-    "grunt-cli": "~0.1.11",
-    "grunt-contrib-jshint": "~0.8.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.3.2",
-    "grunt-contrib-watch": "*",
-    "grunt-macreload": "*",
-    "grunt-css": "~0.5.4",
-    "grunt-markdown": "~0.5.0",
-    "grunt-angular-gettext": "^0.2.15"
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-react": "^6.0.5",
+    "jsdom": "^29.1.1",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
   }
 }

@@ -23,49 +23,33 @@ Open a web browser to `http://localhost:3001/insight/`
 
 ## Development
 
-To run Insight UI locally in development mode:
-
-Install bower dependencies:
+Insight UI is a React app built with [Vite](https://vitejs.dev). Install dependencies:
 
 ```
-$ bower install
+$ npm install
 ```
 
-To compile and minify the web application's assets:
+Run the dev server (proxies `/api` and `/socket.io` to a bitcore-node-pirate instance on `localhost:3001` - see `vite.config.js`):
 
 ```
-$ grunt compile
+$ npm run dev
 ```
 
-There is a convenient Gruntfile.js for automation during editing the code
+Build for production (bitcore-node-pirate's InsightUI service serves the resulting `dist/` directory):
 
 ```
-$ grunt
+$ npm run build
+```
+
+Run the test suite ([Vitest](https://vitest.dev) + React Testing Library):
+
+```
+$ npm test
 ```
 
 ## Multilanguage support
 
-Insight UI uses [angular-gettext](http://angular-gettext.rocketeer.be) for multilanguage support.
-
-To enable a text to be translated, add the ***translate*** directive to html tags. See more details [here](http://angular-gettext.rocketeer.be/dev-guide/annotate/). Then, run:
-
-```
-grunt compile
-```
-
-This action will create a template.pot file in ***po/*** folder. You can open it with some PO editor ([Poedit](http://poedit.net)). Read this [guide](http://angular-gettext.rocketeer.be/dev-guide/translate/) to learn how to edit/update/import PO files from a generated POT file. PO file will be generated inside po/ folder.
-
-If you make new changes, simply run **grunt compile** again to generate a new .pot template and the angular javascript ***js/translations.js***. Then (if use Poedit), open .po file and choose ***update from POT File*** from **Catalog** menu.
-
-Finally changes your default language from ***public/src/js/config***
-
-```
-gettextCatalog.currentLanguage = 'es';
-```
-
-This line will take a look at any *.po files inside ***po/*** folder, e.g.
-**po/es.po**, **po/nl.po**. After any change do not forget to run ***grunt
-compile***.
+Insight UI uses [react-i18next](https://react.i18next.com) for multilanguage support. `src/locales/*.json` holds one flat key -> translated-string JSON file per language (English strings are used directly as keys via `useTranslation()`'s `t()`, with no separate `en.json`). To add or update a translation, edit the relevant language's JSON file directly - there's no separate compile step.
 
 
 ## Note

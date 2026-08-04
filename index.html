@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="/" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="keywords" content="pirate, arrr, transactions, blocks, address, block chain, best block, mining difficulty, hash serialized" />
+  <meta name="description" content="PIRATE Insight Explorer." />
+  <meta name="theme-color" content="#BB9645" />
+  <title>PIRATE ARRR Explorer</title>
+  <link rel="shortcut icon" href="/img/icons/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bai Jamjuree:300,400,500,700,400italic" />
+  <link rel="stylesheet" href="https://pirate.black/donate_arrr/donate_arrr.css" />
+  <script src="https://widgets.coingecko.com/coingecko-coin-ticker-widget.js"></script>
+</head>
+<body>
+  <!--
+    bitcore-node-pirate/index.js's filterIndexHTML() rewrites this literal
+    string server-side (based on the InsightUI service's apiPrefix option)
+    before serving this file, and src/api/base.js reads window.apiPrefix
+    at request time - keep the exact substring `apiPrefix = '/api'` intact.
+  -->
+  <script>window.apiPrefix = '/api';</script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+  <script src="https://pirate.black/donate_arrr/donate_arrr.js"></script>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+</html>
