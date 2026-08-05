@@ -2,9 +2,10 @@ import {createContext, useCallback, useContext, useEffect, useState} from 'react
 import {getCurrency} from '../api/currency';
 import {convert} from '../lib/currency';
 
-// Preserved from the legacy app: this fork's coin ticker, used as the
-// "native unit" currency option (see legacy/src/js/app.js).
-export const NET_SYMBOL = 'KMD';
+// This fork's coin ticker, used as the "native unit" currency option -
+// explorer.piratechain.com displays amounts as e.g. "0.25 PIRATE", not
+// the Komodo-forked codebase's original 'KMD'.
+export const NET_SYMBOL = 'PIRATE';
 
 const CurrencyContext = createContext(null);
 

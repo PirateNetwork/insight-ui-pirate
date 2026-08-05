@@ -52,7 +52,7 @@ export default function Charts() {
   return (
     <section>
       <div className="row">
-        <div className="col-xs-12 col-gray col-gray-fixed">
+        <div className="col-xs-12 col-md-3 col-gray col-gray-fixed">
           <div className="block-id">
             <div className="icon-block text-center">
               <span className="glyphicon glyphicon-stats" />
@@ -71,7 +71,7 @@ export default function Charts() {
             ))}
           </div>
         </div>
-        <div className="col-xs-12 col-md-9 col-md-offset-3">
+        <div className="col-xs-12 col-md-9">
           <div className="page-header">
             <h1>
               <span>{chart ? chart.name : ''}</span>

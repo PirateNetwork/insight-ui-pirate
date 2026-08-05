@@ -106,7 +106,7 @@ export default function Status() {
           <table className="table" style={{tableLayout: 'fixed'}}>
             <tbody>
               <tr>
-                <td>{t('Last Block Hash (Komodod)')}</td>
+                <td>{t('Last Block Hash (pirated)')}</td>
                 <td className="text-right ellipsis">
                   {lastBlock && <Link to={'/block/' + lastBlock.lastblockhash}>{lastBlock.lastblockhash}</Link>}
                 </td>
@@ -122,7 +122,7 @@ export default function Status() {
         </div>
 
         <div className="col-xs-12 col-md-4 col-gray">
-          <h2>{t('Komodo node information')}</h2>
+          <h2>{t('Pirate node information')}</h2>
           <table className="table">
             <tbody>
               <tr>

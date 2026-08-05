@@ -127,37 +127,24 @@ export default function Home() {
               ))}
             </tbody>
           </table>
-
-          {/* eslint-disable-next-line react/no-unknown-property */}
-          <coingecko-coin-ticker-widget coin-id="pirate-chain" currency="usd" locale="en" background-color="#c0c0c0" />
         </div>
         <div className="col-xs-12 col-md-4 col-gray">
-          <iframe
-            width="100%"
-            height="400"
-            frameBorder="none"
-            title="Changelly swap widget"
-            src="https://widget.changelly.com?amount=2.777&address=&fromDefault=xmr&toDefault=arrr&theme=default&merchant_id=ej56txho9r4w49lh&payment_id=&v=3"
-          >
-            Can&apos;t load widget
-          </iframe>
-
           <h2>{t('What is PIRATE?')}</h2>
           <p className="subIntro">
-            Pirate (ARRR) is a real privacy coin which takes financial privacy very serious. Pirate (ARRR) is a 100%
-            private cryptocurrency. PIRATE uses a privacy protocol that cannot be compromised by other users activity
-            on the network.
+            Pirate Chain (ARRR) is a privacy coin which focuses on financial privacy. Pirate Chain (ARRR) is a 100%
+            private cryptocurrency. Pirate Chain cannot be compromised by other users activity on the network where
+            sender and receiver addresses and amounts remain private.
           </p>
           <p className="subIntro">
             Basic Statistics at{' '}
-            <a href="https://explorer.pirate.black/stats" target="_blank" rel="noreferrer">
-              <font color="#ff5050">https://explorer.pirate.black/stats</font>
+            <a href="https://explorer.piratechain.com/stats" target="_blank" rel="noreferrer">
+              https://explorer.piratechain.com/stats
             </a>
           </p>
           <p className="subIntro">
             Pirate Website{' '}
-            <a href="https://pirate.black" target="_blank" rel="noreferrer">
-              <font color="#ff5050">https://pirate.black</font>
+            <a href="https://piratechain.com" target="_blank" rel="noreferrer">
+              https://piratechain.com
             </a>
           </p>
           <a className="twitter-timeline" href="https://twitter.com/PirateChain" target="_blank" rel="noreferrer">
@@ -165,11 +152,7 @@ export default function Home() {
           </a>
           <div id="powered" className="row">
             <center>
-              <img src="/img/pirate.png" width="300px" alt="Pirate Chain" />
-              <br />
-              <a href="piratechain:zs1sv7m6s76d00pkhyshw05hafgxczuykt3s573fr7ea8sr84x03pwdhdhhqa4sjtd26vf9u8jht64">
-                <img src="https://pirate.black/donate-pirate" width="199" height="69" alt="Donate ARRR" />
-              </a>
+              <img src="/img/logo-mark.svg" width="140px" alt="Pirate Chain" />
             </center>
           </div>
         </div>
