@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {getStatus, getSync} from '../api/status';
-import {useSocket} from '../hooks/useSocket';
+import {useBlockRefresh} from '../hooks/useBlockRefresh';
 
 // Mirrors the inline `data-ng-controller="StatusController"` block and
 // the header's own block-count tracking (from HeaderController) inside
@@ -19,27 +19,23 @@ export default function StatusBadge() {
       .catch((e) => setSync({error: 'Could not get sync information' + e.toString()}));
   }, []);
 
-  useSocket((socket) => {
-    socket.emit('subscribe', 'sync');
-    function onStatus(s) {
-      setSync(s);
-    }
-    socket.on('status', onStatus);
-
-    // getInfo's connections/notarized/blocks fields are a one-shot RPC
-    // snapshot, not something the server pushes on its own - refetch on
-    // every new block so "Conn"/"Height"/"Notarized" actually track the
-    // chain instead of freezing at whatever they were on page load.
-    socket.emit('subscribe', 'inv');
-    function onBlock() {
-      getStatus('getInfo').then((d) => setInfo(d.info));
-    }
-    socket.on('block', onBlock);
-
-    return () => {
-      socket.off('status', onStatus);
-      socket.off('block', onBlock);
-    };
+  // getInfo/getSync are one-shot RPC snapshots - the server never
+  // actually pushes updates for either (the 'block' socket event pirated
+  // would drive this from is skipped for every block connected during a
+  // resync, and the 'sync'/'status' event this used to subscribe to has
+  // no server-side publisher at all, in or out of sync - see
+  // useBlockRefresh). Poll both instead of relying on push.
+  useBlockRefresh((isCurrent) => {
+    getStatus('getInfo').then((d) => {
+      if (isCurrent()) setInfo(d.info);
+    });
+    getSync()
+      .then((s) => {
+        if (isCurrent()) setSync(s);
+      })
+      .catch((e) => {
+        if (isCurrent()) setSync({error: 'Could not get sync information' + e.toString()});
+      });
   });
 
   return (

@@ -12,6 +12,14 @@ export function getPeerSync() {
   return apiGet('/peer');
 }
 
+export function getPeers() {
+  return apiGet('/peers');
+}
+
+export function getChainStats() {
+  return apiGet('/chain-stats');
+}
+
 export function getVersion() {
   return apiGet('/version');
 }

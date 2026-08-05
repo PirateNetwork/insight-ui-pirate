@@ -8,7 +8,9 @@ import CurrencySelector from './CurrencySelector';
 const MENU = [
   {title: 'Blocks', link: '/blocks'},
   {title: 'Charts', link: '/charts'},
-  {title: 'Status', link: '/status'}
+  {title: 'Status', link: '/status'},
+  {title: 'Peers', link: '/peers'},
+  {title: 'Stats', link: '/stats'}
 ];
 
 export default function Header() {

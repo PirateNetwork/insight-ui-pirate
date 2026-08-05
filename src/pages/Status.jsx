@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {getStatus, getSync} from '../api/status';
 import {humanSince} from '../lib/time';
-import {useSocket} from '../hooks/useSocket';
+import {useBlockRefresh} from '../hooks/useBlockRefresh';
 
 export default function Status() {
   const {t} = useTranslation();
@@ -19,27 +19,27 @@ export default function Status() {
     getStatus('getInfo').then((d) => setInfo(d.info));
   }, []);
 
-  useSocket((socket) => {
-    socket.emit('subscribe', 'sync');
-    function onStatus(s) {
-      setSync(s);
-    }
-    socket.on('status', onStatus);
-
-    // getInfo/getLastBlockHash are one-shot RPC snapshots, not something
-    // the server pushes on its own - refetch on every new block so this
-    // page actually tracks the chain instead of freezing at page load.
-    socket.emit('subscribe', 'inv');
-    function onBlock() {
-      getStatus('getLastBlockHash').then(setLastBlock);
-      getStatus('getInfo').then((d) => setInfo(d.info));
-    }
-    socket.on('block', onBlock);
-
-    return () => {
-      socket.off('status', onStatus);
-      socket.off('block', onBlock);
-    };
+  // getInfo/getLastBlockHash/getSync are one-shot RPC snapshots - the
+  // server never actually pushes updates for any of them (the 'block'
+  // socket event pirated would drive this from is skipped for every
+  // block connected during a resync, and the 'sync'/'status' event this
+  // used to subscribe to has no server-side publisher at all, in or out
+  // of sync - see useBlockRefresh). Poll all three instead of relying on
+  // push, so this page tracks the chain instead of freezing at load.
+  useBlockRefresh((isCurrent) => {
+    getStatus('getLastBlockHash').then((d) => {
+      if (isCurrent()) setLastBlock(d);
+    });
+    getStatus('getInfo').then((d) => {
+      if (isCurrent()) setInfo(d.info);
+    });
+    getSync()
+      .then((s) => {
+        if (isCurrent()) setSync(s);
+      })
+      .catch((e) => {
+        if (isCurrent()) setSync({error: 'Could not get sync information' + e.toString()});
+      });
   });
 
   return (

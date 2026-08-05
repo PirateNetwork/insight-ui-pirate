@@ -1,46 +1,14 @@
-import {useCallback, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {getBlocks} from '../api/blocks';
-import {useSocket} from '../hooks/useSocket';
 import {useCurrency} from '../context/CurrencyContext';
+import {useRecentActivity} from '../context/RecentActivityContext';
 import {humanSince} from '../lib/time';
 import SearchBox from '../components/SearchBox';
-
-const TRANSACTION_DISPLAYED = 10;
-const BLOCKS_DISPLAYED = 5;
 
 export default function Home() {
   const {t} = useTranslation();
   const {getConvertion} = useCurrency();
-  const [blocks, setBlocks] = useState([]);
-  const [txs, setTxs] = useState([]);
-
-  const refreshBlocks = useCallback(() => {
-    getBlocks({limit: BLOCKS_DISPLAYED}).then((res) => setBlocks(res.blocks));
-  }, []);
-
-  useEffect(() => {
-    refreshBlocks();
-  }, [refreshBlocks]);
-
-  useSocket((socket) => {
-    socket.emit('subscribe', 'inv');
-
-    function onTx(tx) {
-      setTxs((prev) => [tx, ...prev].slice(0, TRANSACTION_DISPLAYED));
-    }
-    function onBlock() {
-      refreshBlocks();
-    }
-    socket.on('tx', onTx);
-    socket.on('block', onBlock);
-
-    return () => {
-      socket.off('tx', onTx);
-      socket.off('block', onBlock);
-    };
-  });
+  const {blocks, txs} = useRecentActivity();
 
   return (
     <div className="container">
