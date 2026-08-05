@@ -25,7 +25,21 @@ export default function Status() {
       setSync(s);
     }
     socket.on('status', onStatus);
-    return () => socket.off('status', onStatus);
+
+    // getInfo/getLastBlockHash are one-shot RPC snapshots, not something
+    // the server pushes on its own - refetch on every new block so this
+    // page actually tracks the chain instead of freezing at page load.
+    socket.emit('subscribe', 'inv');
+    function onBlock() {
+      getStatus('getLastBlockHash').then(setLastBlock);
+      getStatus('getInfo').then((d) => setInfo(d.info));
+    }
+    socket.on('block', onBlock);
+
+    return () => {
+      socket.off('status', onStatus);
+      socket.off('block', onBlock);
+    };
   });
 
   return (

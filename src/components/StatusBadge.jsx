@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {getStatus, getSync} from '../api/status';
-import {getBlock} from '../api/blocks';
 import {useSocket} from '../hooks/useSocket';
 
 // Mirrors the inline `data-ng-controller="StatusController"` block and
@@ -12,7 +11,6 @@ export default function StatusBadge() {
   const {t} = useTranslation();
   const [info, setInfo] = useState(null);
   const [sync, setSync] = useState(null);
-  const [totalBlocks, setTotalBlocks] = useState(null);
 
   useEffect(() => {
     getStatus('getInfo').then((d) => setInfo(d.info));
@@ -28,9 +26,13 @@ export default function StatusBadge() {
     }
     socket.on('status', onStatus);
 
+    // getInfo's connections/notarized/blocks fields are a one-shot RPC
+    // snapshot, not something the server pushes on its own - refetch on
+    // every new block so "Conn"/"Height"/"Notarized" actually track the
+    // chain instead of freezing at whatever they were on page load.
     socket.emit('subscribe', 'inv');
-    function onBlock(block) {
-      getBlock(block.toString()).then((b) => setTotalBlocks(b.height));
+    function onBlock() {
+      getStatus('getInfo').then((d) => setInfo(d.info));
     }
     socket.on('block', onBlock);
 
@@ -62,7 +64,7 @@ export default function StatusBadge() {
         <strong>{t('Conn')}</strong> {info && info.connections}
       </span>{' '}
       &middot;
-      <strong>{t('Height')}</strong> {totalBlocks ?? (info && info.blocks)} &middot;
+      <strong>{t('Height')}</strong> {info && info.blocks} &middot;
       <strong>{t('Notarized')}</strong> {info && info.notarized}
     </div>
   );
