@@ -16,10 +16,13 @@
 </head>
 <body>
   <!--
-    bitcore-node-pirate/index.js's filterIndexHTML() rewrites this literal
-    string server-side (based on the InsightUI service's apiPrefix option)
-    before serving this file, and src/api/base.js reads window.apiPrefix
-    at request time - keep the exact substring `apiPrefix = '/api'` intact.
+    bitcore-node-pirate/index.js's filterIndexHTML() does a single
+    (non-global) regex replace on this line server-side, based on the
+    InsightUI service's apiPrefix option, before serving this file - and
+    src/api/base.js reads window.apiPrefix at request time. Don't add
+    another occurrence of this assignment's exact text anywhere earlier
+    in this document (including in comments), since a non-global regex
+    only rewrites the first match.
   -->
   <script>window.apiPrefix = '/api';</script>
   <div id="root"></div>
