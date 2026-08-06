@@ -263,8 +263,8 @@ margin-left: 0;
 .navbar-default .navbar-nav>li>a {
   color: var(--pc-text-dim);
   font-family: 'Bai Jamjuree', 'Ubuntu', sans-serif;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus {
@@ -1038,7 +1038,7 @@ a.v_highlight_more {
     width: 280px;
   }
   .navbar-form .form-control {
-    width: 350px;
+    width: 230px;
   }
 }
 
