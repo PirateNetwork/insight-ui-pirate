@@ -29,6 +29,7 @@ export default function Charts() {
   const [charts, setCharts] = useState({});
   const [chart, setChart] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getCharts().then((res) => setCharts(res.charts));
@@ -37,12 +38,18 @@ export default function Charts() {
   useEffect(() => {
     if (!chartType) {
       setChart(null);
+      setError(null);
       return;
     }
     setLoading(true);
+    setError(null);
+    setChart(null);
     getChart(chartType).then((c) => {
       setLoading(false);
       setChart(c);
+    }).catch((err) => {
+      setLoading(false);
+      setError(err.message || t('Unable to load chart'));
     });
   }, [chartType]);
 
@@ -81,6 +88,9 @@ export default function Charts() {
             <div>
               <span>{t('Loading chart...')}</span> <span className="loader-gif" />
             </div>
+          )}
+          {!loading && error && (
+            <div className="alert alert-danger">{error}</div>
           )}
           {!loading && chart && (
             <ResponsiveContainer width="100%" height={400}>
