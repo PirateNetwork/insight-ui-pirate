@@ -23,3 +23,7 @@ export function getChainStats() {
 export function getVersion() {
   return apiGet('/version');
 }
+
+export function getIronwoodActivation() {
+  return apiGet('/ironwood-activation');
+}

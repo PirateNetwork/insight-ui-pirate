@@ -4,6 +4,7 @@ import {useCurrency} from '../context/CurrencyContext';
 import {useRecentActivity} from '../context/RecentActivityContext';
 import {humanSince} from '../lib/time';
 import SearchBox from '../components/SearchBox';
+import IronwoodCountdown from '../components/IronwoodCountdown';
 
 export default function Home() {
   const {t} = useTranslation();
@@ -12,6 +13,7 @@ export default function Home() {
 
   return (
     <div className="container">
+      <IronwoodCountdown />
       <div id="home" className="row">
         <div className="col-xs-12 col-md-8">
           <div id="search-form-mobile" className="visible-xs">

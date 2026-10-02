@@ -47,3 +47,23 @@ export function humanSinceDay(unixSeconds, locale) {
 export function humanSinceMs(msTimestamp, locale) {
   return humanSince(msTimestamp / 1000, locale);
 }
+
+// A precise, live-ticking "Dd HHh MMm SSs" duration, for a countdown that
+// needs exact digits rather than humanSince's vague "in 2 days" - larger
+// units are omitted once they're zero (so the display shortens naturally
+// as a countdown nears its end) but seconds always show.
+export function formatDuration(totalSeconds) {
+  const clamped = Math.max(0, Math.floor(totalSeconds));
+  const days = Math.floor(clamped / 86400);
+  const hours = Math.floor((clamped % 86400) / 3600);
+  const minutes = Math.floor((clamped % 3600) / 60);
+  const seconds = clamped % 60;
+
+  const pad = (n) => String(n).padStart(2, '0');
+  const parts = [];
+  if (days > 0) parts.push(days + 'd');
+  if (days > 0 || hours > 0) parts.push(pad(hours) + 'h');
+  if (days > 0 || hours > 0 || minutes > 0) parts.push(pad(minutes) + 'm');
+  parts.push(pad(seconds) + 's');
+  return parts.join(' ');
+}
