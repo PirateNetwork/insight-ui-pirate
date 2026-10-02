@@ -1,5 +1,5 @@
 import {describe, it, expect} from 'vitest';
-import {aggregateItems} from './transactions';
+import {aggregateItems, computePoolFlows} from './transactions';
 
 describe('aggregateItems', () => {
   it('returns an empty array for null/undefined input', () => {
@@ -61,5 +61,91 @@ describe('aggregateItems', () => {
     ];
     const result = aggregateItems(vin);
     expect(result[0].unconfirmedInput).toBe(true);
+  });
+});
+
+describe('computePoolFlows', () => {
+  it('attributes a direct Sapling -> Ironwood migration to the Ironwood pool, not "Public"', () => {
+    // No transparent vin/vout at all - a positive Sapling valueBalance here
+    // can only be absorbed by the Ironwood pool's matching negative one,
+    // never the transparent pool, since no transparent output exists.
+    const tx = {
+      isCoinBase: false,
+      vin: [],
+      vout: [],
+      spendDescs: [{}],
+      outputDescs: [{}, {}],
+      valueBalance: 100,
+      ironwood: {actions: [{}], valueBalance: -100}
+    };
+    const {sources, destinations, neutral} = computePoolFlows(tx);
+    expect(sources).toEqual([
+      {key: 'sapling', delta: -100, counts: {spends: 1, outputs: 2}, amount: 100}
+    ]);
+    expect(destinations).toEqual([
+      {key: 'ironwood', delta: 100, counts: {actions: 1}, amount: 100}
+    ]);
+    expect(neutral).toEqual([]);
+  });
+
+  it('attributes an ordinary t -> z shield to the transparent and Sapling pools', () => {
+    const tx = {
+      isCoinBase: false,
+      vin: [{value: 5}],
+      vout: [],
+      spendDescs: [],
+      outputDescs: [{}],
+      valueBalance: -4.9999
+    };
+    const {sources, destinations} = computePoolFlows(tx);
+    expect(sources).toEqual([
+      {key: 'transparent', delta: -5, counts: {in: 1, out: 0}, amount: 5}
+    ]);
+    expect(destinations).toEqual([
+      {key: 'sapling', delta: 4.9999, counts: {spends: 0, outputs: 1}, amount: 4.9999}
+    ]);
+  });
+
+  it('treats a net-zero internal Sapling shuffle as neutral, not a source or destination', () => {
+    const tx = {
+      isCoinBase: false,
+      vin: [],
+      vout: [],
+      spendDescs: [{}],
+      outputDescs: [{}],
+      valueBalance: 0
+    };
+    const {sources, destinations, neutral} = computePoolFlows(tx);
+    expect(sources).toEqual([]);
+    expect(destinations).toEqual([]);
+    expect(neutral).toEqual([
+      {key: 'sapling', delta: -0, counts: {spends: 1, outputs: 1}}
+    ]);
+  });
+
+  it('treats coinbase vin as newly generated coins, not a transparent-pool source', () => {
+    const tx = {
+      isCoinBase: true,
+      vin: [{coinbase: 'script', sequence: 0, n: 0}],
+      vout: [{value: '10.00000000'}]
+    };
+    const {sources, destinations} = computePoolFlows(tx);
+    expect(sources).toEqual([]);
+    expect(destinations).toEqual([
+      {key: 'transparent', delta: 10, counts: {in: 0, out: 1}, amount: 10}
+    ]);
+  });
+
+  it('includes an Ironwood-only transaction (no Sapling activity at all)', () => {
+    const tx = {
+      isCoinBase: false,
+      vin: [],
+      vout: [],
+      ironwood: {actions: [{}, {}], valueBalance: 0}
+    };
+    const {neutral} = computePoolFlows(tx);
+    expect(neutral).toEqual([
+      {key: 'ironwood', delta: -0, counts: {actions: 2}}
+    ]);
   });
 });

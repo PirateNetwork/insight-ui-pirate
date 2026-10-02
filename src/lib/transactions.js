@@ -68,3 +68,77 @@ export function aggregateItems(items) {
 
   return ret;
 }
+
+// A zatoshi is 1e-8 PIRATE - deltas smaller than this are float noise from
+// summing already-divided decimal values, not a real net flow.
+const EPS = 1e-8;
+
+// Computes each shielded/transparent pool's net balance-sheet delta for a
+// tx (positive = pool gained value, negative = pool lost it), then buckets
+// pools into sources/destinations/neutral so the UI can render an explicit
+// flow diagram instead of assuming any non-zero Sapling valueBalance means
+// "Public input/output" - that stopped being true once Ironwood let value
+// move directly between shielded pools without ever touching a transparent
+// output. Sign conventions (valueBalance positive = value leaving the
+// pool) are the consensus ones from TreasureChest's CheckTransaction and
+// are identical for Sapling and Ironwood (see src/main.cpp's
+// valueBalanceSapling/valueBalanceIronwood handling).
+export function computePoolFlows(tx) {
+  const pools = [];
+
+  if (tx.isCoinBase) {
+    const vout = tx.vout || [];
+    if (vout.length > 0) {
+      const outTotal = vout.reduce((sum, v) => sum + Number(v.value || 0), 0);
+      pools.push({key: 'transparent', delta: outTotal, counts: {in: 0, out: vout.length}});
+    }
+  } else {
+    const vin = tx.vin || [];
+    const vout = tx.vout || [];
+    if (vin.length > 0 || vout.length > 0) {
+      const inTotal = vin.reduce((sum, v) => sum + Number(v.value || 0), 0);
+      const outTotal = vout.reduce((sum, v) => sum + Number(v.value || 0), 0);
+      pools.push({key: 'transparent', delta: outTotal - inTotal, counts: {in: vin.length, out: vout.length}});
+    }
+  }
+
+  const joinsplits = tx.vjoinsplit || [];
+  if (joinsplits.length > 0) {
+    // vpub_old enters the joinsplit from the public pool (pool gains),
+    // vpub_new leaves it back to the public pool (pool loses).
+    const delta = joinsplits.reduce((sum, j) => sum + (Number(j.vpub_old) - Number(j.vpub_new)), 0);
+    pools.push({key: 'sprout', delta, counts: {joinsplits: joinsplits.length}});
+  }
+
+  const spendDescs = tx.spendDescs || [];
+  const outputDescs = tx.outputDescs || [];
+  const saplingValueBalance = Number(tx.valueBalance) || 0;
+  if (spendDescs.length > 0 || outputDescs.length > 0 || Math.abs(saplingValueBalance) > EPS) {
+    pools.push({
+      key: 'sapling',
+      delta: -saplingValueBalance,
+      counts: {spends: spendDescs.length, outputs: outputDescs.length}
+    });
+  }
+
+  const ironwoodActions = (tx.ironwood && tx.ironwood.actions) || [];
+  const ironwoodValueBalance = (tx.ironwood && Number(tx.ironwood.valueBalance)) || 0;
+  if (ironwoodActions.length > 0 || Math.abs(ironwoodValueBalance) > EPS) {
+    pools.push({key: 'ironwood', delta: -ironwoodValueBalance, counts: {actions: ironwoodActions.length}});
+  }
+
+  const sources = [];
+  const destinations = [];
+  const neutral = [];
+  pools.forEach((pool) => {
+    if (pool.delta > EPS) {
+      destinations.push({...pool, amount: pool.delta});
+    } else if (pool.delta < -EPS) {
+      sources.push({...pool, amount: -pool.delta});
+    } else {
+      neutral.push(pool);
+    }
+  });
+
+  return {sources, destinations, neutral};
+}

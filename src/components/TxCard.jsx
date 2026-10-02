@@ -2,8 +2,30 @@ import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useCurrency} from '../context/CurrencyContext';
-import {aggregateItems} from '../lib/transactions';
+import {aggregateItems, computePoolFlows} from '../lib/transactions';
 import CopyButton from './CopyButton';
+
+const POOL_LABELS = {
+  transparent: 'Transparent',
+  sprout: 'Sprout',
+  sapling: 'Sapling',
+  ironwood: 'Ironwood'
+};
+
+function poolCountLabel(t, pool) {
+  switch (pool.key) {
+    case 'transparent':
+      return pool.counts.in + ' ' + t('in') + ', ' + pool.counts.out + ' ' + t('out');
+    case 'sprout':
+      return pool.counts.joinsplits + ' ' + t('joinsplit(s)');
+    case 'sapling':
+      return pool.counts.spends + ' ' + t('spend(s)') + ', ' + pool.counts.outputs + ' ' + t('output(s)');
+    case 'ironwood':
+      return pool.counts.actions + ' ' + t('action(s)');
+    default:
+      return '';
+  }
+}
 
 // Ported from legacy/views/transaction/tx.html. The legacy template also
 // paginated each vin/vout list 5-at-a-time with its own "show more"
@@ -20,9 +42,13 @@ export default function TxCard({tx, currentAddr}) {
 
   const vinSimple = aggregateItems(tx.vin);
   const voutSimple = aggregateItems(tx.vout);
+  const hasIronwood =
+    tx.ironwood && ((tx.ironwood.actions && tx.ironwood.actions.length > 0) || Number(tx.ironwood.valueBalance));
   const hasShielded =
     tx.bindingSig || (tx.vjoinsplit && tx.vjoinsplit.length > 0) ||
-    (tx.spendDescs && tx.spendDescs.length > 0) || (tx.outputDescs && tx.outputDescs.length > 0);
+    (tx.spendDescs && tx.spendDescs.length > 0) || (tx.outputDescs && tx.outputDescs.length > 0) ||
+    hasIronwood;
+  const {sources: poolSources, destinations: poolDestinations, neutral: poolNeutral} = computePoolFlows(tx);
 
   return (
     <div className="block-tx">
@@ -76,67 +102,52 @@ export default function TxCard({tx, currentAddr}) {
               </div>
             </div>
           )}
-          {typeof tx.valueBalance === 'number' && tx.valueBalance !== 0 && (
+          {hasShielded && (poolSources.length > 0 || poolDestinations.length > 0 || poolNeutral.length > 0) && (
             <div className="row">
               <div className="panel panel-default">
                 <div className="panel-body transaction-vin-vout">
-                  <div className="col-md-3 col-xs-12">
-                    {tx.valueBalance < 0 && (
-                      <div>
-                        <div className="pull-right btc-value">{getConvertion(-tx.valueBalance)}</div>
-                        <div className="ellipsis">
-                          <span>Public input</span>
+                  <div className="row">
+                    <div className="col-md-5 col-xs-12">
+                      {poolSources.length === 0 && (
+                        <div className="ellipsis text-muted text-center">{t('No net pool outflow')}</div>
+                      )}
+                      {poolSources.map((pool) => (
+                        <div className="ellipsis" key={pool.key}>
+                          <span className="pull-right btc-value">{getConvertion(pool.amount)}</span>
+                          <strong>{t(POOL_LABELS[pool.key])}</strong>{' '}
+                          <span className="text-muted small">{poolCountLabel(t, pool)}</span>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-md-4 col-xs-12">
-                    <div className="ellipsis text-center">
-                      <span>
-                        Shielded Spends ({(tx.spendDescs || []).length}) --&gt; Shielded Outputs (
-                        {(tx.outputDescs || []).length})
-                      </span>
+                      ))}
+                    </div>
+                    <div className="col-md-2 col-xs-12 text-center">
+                      <span className="lead glyphicon glyphicon-chevron-right text-muted" />
+                    </div>
+                    <div className="col-md-5 col-xs-12">
+                      {poolDestinations.length === 0 && (
+                        <div className="ellipsis text-muted text-center">{t('No net pool inflow')}</div>
+                      )}
+                      {poolDestinations.map((pool) => (
+                        <div className="ellipsis" key={pool.key}>
+                          <span className="pull-right btc-value">{getConvertion(pool.amount)}</span>
+                          <strong>{t(POOL_LABELS[pool.key])}</strong>{' '}
+                          <span className="text-muted small">{poolCountLabel(t, pool)}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="col-md-3 col-xs-12">
-                    {tx.valueBalance > 0 && (
-                      <div>
-                        <div className="pull-right btc-value">{getConvertion(tx.valueBalance)}</div>
-                        <div className="ellipsis">
-                          <span>Public output</span>
-                        </div>
+                  {poolNeutral.length > 0 && (
+                    <div className="row" style={{marginTop: '0.5em'}}>
+                      <div className="col-md-12 text-muted small">
+                        {poolNeutral.map((pool) => (
+                          <div className="ellipsis" key={pool.key}>
+                            {t(POOL_LABELS[pool.key])}: {poolCountLabel(t, pool)} ({t('no net flow')})
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
-          {tx.vjoinsplit && tx.vjoinsplit.length > 0 && (
-            <div className="row">
-              {tx.vjoinsplit.map((vjs) => (
-                <div className="panel panel-default" key={vjs.n}>
-                  <div className="panel-body transaction-vin-vout">
-                    <div className="col-md-3 col-xs-12">
-                      <div className="pull-right btc-value">{getConvertion(vjs.vpub_old)}</div>
-                      <div className="ellipsis">
-                        <span>Public input</span>
-                      </div>
-                    </div>
-                    <div className="col-md-4 col-xs-12">
-                      <div className="ellipsis text-center">
-                        <span>JoinSplit [{vjs.n}]</span>
-                      </div>
-                    </div>
-                    <div className="col-md-3 col-xs-12">
-                      <div className="pull-right btc-value">{getConvertion(vjs.vpub_new)}</div>
-                      <div className="ellipsis">
-                        <span>Public output</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           )}
         </div>
