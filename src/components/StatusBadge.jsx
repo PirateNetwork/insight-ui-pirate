@@ -40,28 +40,28 @@ export default function StatusBadge() {
 
   return (
     <div className="status">
-      <div className="pull-left">
-        {sync && sync.error && (
-          <span className="t text-danger" title={sync.error}>
-            <span className="glyphicon glyphicon-warning-sign" /> ERROR
-          </span>
-        )}
-        {sync && sync.status === 'syncing' && (
-          <span className="t" title={`${sync.syncedBlocks} / ${sync.blockChainHeight} synced. ${sync.skippedBlocks || 0} skipped`}>
-            <span className="glyphicon glyphicon-refresh icon-rotate" /> {sync.syncPercentage}%
-          </span>
-        )}
-        {sync && sync.status === 'finished' && (
-          <span className="glyphicon glyphicon-ok" title="Historic sync finished" />
-        )}
-      </div>
-      &nbsp; &middot;
+      {sync && sync.error && (
+        <span className="t text-danger" title={sync.error}>
+          <span className="glyphicon glyphicon-warning-sign" /> ERROR
+        </span>
+      )}
+      {sync && sync.status === 'syncing' && (
+        <span className="t" title={`${sync.syncedBlocks} / ${sync.blockChainHeight} synced. ${sync.skippedBlocks || 0} skipped`}>
+          <span className="glyphicon glyphicon-refresh icon-rotate" /> {sync.syncPercentage}%
+        </span>
+      )}
+      {sync && sync.status === 'finished' && (
+        <span className="glyphicon glyphicon-ok" title="Historic sync finished" />
+      )}
       <span>
         <strong>{t('Conn')}</strong> {info && info.connections}
-      </span>{' '}
-      &middot;
-      <strong>{t('Height')}</strong> {info && info.blocks} &middot;
-      <strong>{t('Notarized')}</strong> {info && info.notarized}
+      </span>
+      <span>
+        <strong>{t('Height')}</strong> {info && info.blocks}
+      </span>
+      <span>
+        <strong>{t('Notarized')}</strong> {info && info.notarized}
+      </span>
     </div>
   );
 }

@@ -81,7 +81,7 @@ export default function Transaction() {
                 <td className="text-muted text-right">
                   {tx.blockhash ? (
                     <div className="ellipsis">
-                      <Link to={'/block/' + tx.blockhash}>{tx.blockhash}</Link>
+                      <Link className="hash" to={'/block/' + tx.blockhash}>{tx.blockhash}</Link>
                     </div>
                   ) : (
                     'Unconfirmed'

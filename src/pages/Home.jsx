@@ -4,7 +4,7 @@ import {useCurrency} from '../context/CurrencyContext';
 import {useRecentActivity} from '../context/RecentActivityContext';
 import {humanSince} from '../lib/time';
 import SearchBox from '../components/SearchBox';
-import IronwoodCountdown from '../components/IronwoodCountdown';
+import UpgradeBanner from '../components/UpgradeBanner';
 
 export default function Home() {
   const {t} = useTranslation();
@@ -12,8 +12,8 @@ export default function Home() {
   const {blocks, txs} = useRecentActivity();
 
   return (
-    <div className="container">
-      <IronwoodCountdown />
+    <>
+      <UpgradeBanner />
       <div id="home" className="row">
         <div className="col-xs-12 col-md-8">
           <div id="search-form-mobile" className="visible-xs">
@@ -38,7 +38,7 @@ export default function Home() {
             <tbody>
               {!blocks.length && (
                 <tr>
-                  <td colSpan={4}>{t('Waiting for blocks...')}</td>
+                  <td colSpan={5}>{t('Waiting for blocks...')}</td>
                 </tr>
               )}
               {blocks.map((b) => (
@@ -71,22 +71,26 @@ export default function Home() {
           <h2>{t('Latest Transactions')}</h2>
 
           <table className="table table-hover table-striped" style={{tableLayout: 'fixed'}}>
+            <colgroup>
+              <col />
+              <col className="col-value" />
+            </colgroup>
             <thead>
               <tr>
-                <th>Hash</th>
+                <th>{t('Hash')}</th>
                 <th className="text-right">{t('Value Out')}</th>
               </tr>
             </thead>
             <tbody>
               {!txs.length && (
                 <tr>
-                  <td colSpan={3}>{t('Waiting for transactions...')}</td>
+                  <td colSpan={2}>{t('Waiting for transactions...')}</td>
                 </tr>
               )}
               {txs.map((tx) => (
                 <tr className="fader" key={tx.txid}>
                   <td>
-                    <Link className="ellipsis" to={'/tx/' + tx.txid}>
+                    <Link className="ellipsis hash" to={'/tx/' + tx.txid}>
                       {tx.txid}
                     </Link>
                   </td>
@@ -98,35 +102,32 @@ export default function Home() {
             </tbody>
           </table>
         </div>
-        <div className="col-xs-12 col-md-4 col-gray">
-          <h2>{t('What is PIRATE?')}</h2>
-          <p className="subIntro">
-            Pirate Chain (ARRR) is a privacy coin which focuses on financial privacy. Pirate Chain (ARRR) is a 100%
-            private cryptocurrency. Pirate Chain cannot be compromised by other users activity on the network where
-            sender and receiver addresses and amounts remain private.
-          </p>
-          <p className="subIntro">
-            Basic Statistics at{' '}
-            <a href="https://explorer.piratechain.com/stats" target="_blank" rel="noreferrer">
-              https://explorer.piratechain.com/stats
-            </a>
-          </p>
-          <p className="subIntro">
-            Pirate Website{' '}
-            <a href="https://piratechain.com" target="_blank" rel="noreferrer">
-              https://piratechain.com
-            </a>
-          </p>
-          <a className="twitter-timeline" href="https://twitter.com/PirateChain" target="_blank" rel="noreferrer">
-            Tweets by PirateChain
-          </a>
-          <div id="powered" className="row">
-            <center>
-              <img src="/img/logo-mark.svg" width="140px" alt="Pirate Chain" />
-            </center>
+        <aside className="col-xs-12 col-md-4">
+          <div className="side-card">
+            <h2>{t('What is Pirate Chain?')}</h2>
+            <p className="subIntro">
+              Pirate Chain (ARRR) is a privacy coin which focuses on financial privacy. Pirate Chain (ARRR) is a 100%
+              private cryptocurrency. Pirate Chain cannot be compromised by other users activity on the network where
+              sender and receiver addresses and amounts remain private.
+            </p>
+            <ul className="side-links">
+              <li>
+                <Link to="/stats">{t('Network statistics')}</Link>
+              </li>
+              <li>
+                <a href="https://piratechain.com" target="_blank" rel="noopener noreferrer">
+                  piratechain.com
+                </a>
+              </li>
+              <li>
+                <a href="https://x.com/PirateChain" target="_blank" rel="noopener noreferrer">
+                  @PirateChain {t('on X')}
+                </a>
+              </li>
+            </ul>
           </div>
-        </div>
+        </aside>
       </div>
-    </div>
+    </>
   );
 }

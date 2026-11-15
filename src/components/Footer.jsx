@@ -1,24 +1,26 @@
-import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {getVersion} from '../api/status';
 
 const AVAILABLE_LANGUAGES = [
   {name: 'English', isoCode: 'en'},
   {name: 'Deutsch', isoCode: 'de_DE'},
   {name: 'Русский', isoCode: 'ru'},
-  {name: 'Spanish', isoCode: 'es'},
+  {name: 'Español', isoCode: 'es'},
   {name: 'Bahasa Indonesia', isoCode: 'id_ID'},
-  {name: 'Japanese', isoCode: 'ja'}
+  {name: '日本語', isoCode: 'ja'}
+];
+
+// Official Pirate Chain channels, as linked from piratechain.com.
+const PIRATE_CHAIN_LINKS = [
+  {name: 'Website', href: 'https://piratechain.com'},
+  {name: 'GitHub', href: 'https://github.com/PirateNetwork'},
+  {name: 'X', href: 'https://x.com/PirateChain'},
+  {name: 'Telegram', href: 'https://t.me/piratechain'},
+  {name: 'Reddit', href: 'https://www.reddit.com/r/piratechain'}
 ];
 
 export default function Footer() {
   const {t, i18n} = useTranslation();
-  const [version, setVersion] = useState('');
-
-  useEffect(() => {
-    getVersion().then((res) => setVersion(res.version));
-  }, []);
 
   function setLanguage(isoCode) {
     i18n.changeLanguage(isoCode);
@@ -26,35 +28,41 @@ export default function Footer() {
   }
 
   return (
-    <div id="footer" role="navigation">
+    <footer id="footer">
       <div className="container">
-        <div className="links m20t pull-left">
-          <span className="languages">
-            [
-            {AVAILABLE_LANGUAGES.map((l, i) => (
-              <a
-                key={l.isoCode}
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setLanguage(l.isoCode);
-                }}
-                className={i18n.language === l.isoCode ? 'selected' : ''}
-              >
-                {i > 0 && <span> &middot; </span>}
-                {l.name}
+        <div className="footer-row">
+          <Link to="/" className="footer-brand">
+            <img src="/img/logo-mark.svg" alt="" aria-hidden="true" />
+            Pirate Chain Explorer
+          </Link>
+          <nav className="footer-links" aria-label="Pirate Chain">
+            {PIRATE_CHAIN_LINKS.map((l) => (
+              <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer">
+                {t(l.name)}
               </a>
             ))}
-            ]
-          </span>
-          &nbsp; [<Link to="/messages/verify">{t('verify message')}</Link>
-          <span> &middot; </span>
-          <Link to="/tx/send">{t('broadcast transaction')}</Link>]
+          </nav>
         </div>
-        <a className="insight m10v pull-right" target="_blank" rel="noreferrer" href="http://insight.is">
-          insight <small>API v{version}</small>
-        </a>
+        <div className="footer-row footer-row-secondary">
+          <div className="footer-languages">
+            {AVAILABLE_LANGUAGES.map((l) => (
+              <button
+                type="button"
+                key={l.isoCode}
+                onClick={() => setLanguage(l.isoCode)}
+                className={i18n.language === l.isoCode ? 'selected' : ''}
+                aria-pressed={i18n.language === l.isoCode}
+              >
+                {l.name}
+              </button>
+            ))}
+          </div>
+          <div className="footer-tools">
+            <Link to="/messages/verify">{t('Verify message')}</Link>
+            <Link to="/tx/send">{t('Broadcast transaction')}</Link>
+          </div>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 }

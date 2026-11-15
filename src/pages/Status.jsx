@@ -135,55 +135,57 @@ export default function Status() {
           </table>
         </div>
 
-        <div className="col-xs-12 col-md-4 col-gray">
-          <h2>{t('Pirate node information')}</h2>
-          <table className="table">
-            <tbody>
-              <tr>
-                <td>{t('Version')}</td>
-                <td className="text-right">{info && info.version}</td>
-              </tr>
-              <tr>
-                <td>{t('Protocol version')}</td>
-                <td className="text-right">{info && info.protocolversion}</td>
-              </tr>
-              <tr>
-                <td>{t('Blocks')}</td>
-                <td className="text-right">
-                  {info && <Link to={'/block-index/' + info.blocks}>{info.blocks}</Link>}
-                </td>
-              </tr>
-              <tr>
-                <td>{t('Last Notarized Height')}</td>
-                <td className="text-right">{info && info.notarized}</td>
-              </tr>
-              <tr>
-                <td>{t('Time Offset')}</td>
-                <td className="text-right">{info && info.timeoffset}</td>
-              </tr>
-              <tr>
-                <td>{t('Connections to other nodes')}</td>
-                <td className="text-right">{info && info.connections}</td>
-              </tr>
-              <tr>
-                <td>{t('Mining Difficulty')}</td>
-                <td className="text-right">{info && info.difficulty}</td>
-              </tr>
-              <tr>
-                <td>{t('Network')}</td>
-                <td className="text-right">{info && info.network}</td>
-              </tr>
-              <tr>
-                <td>{t('Proxy setting')}</td>
-                <td className="text-right">{info && info.proxy}</td>
-              </tr>
-              <tr>
-                <td>{t('Info Errors')}</td>
-                <td className="text-right">{info && info.errors}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <aside className="col-xs-12 col-md-4">
+          <div className="side-card">
+            <h2>{t('Pirate node information')}</h2>
+            <table className="table">
+              <tbody>
+                <tr>
+                  <td>{t('Version')}</td>
+                  <td className="text-right">{info && info.version}</td>
+                </tr>
+                <tr>
+                  <td>{t('Protocol version')}</td>
+                  <td className="text-right">{info && info.protocolversion}</td>
+                </tr>
+                <tr>
+                  <td>{t('Blocks')}</td>
+                  <td className="text-right">
+                    {info && <Link to={'/block-index/' + info.blocks}>{info.blocks}</Link>}
+                  </td>
+                </tr>
+                <tr>
+                  <td>{t('Last Notarized Height')}</td>
+                  <td className="text-right">{info && info.notarized}</td>
+                </tr>
+                <tr>
+                  <td>{t('Time Offset')}</td>
+                  <td className="text-right">{info && info.timeoffset}</td>
+                </tr>
+                <tr>
+                  <td>{t('Connections to other nodes')}</td>
+                  <td className="text-right">{info && info.connections}</td>
+                </tr>
+                <tr>
+                  <td>{t('Mining Difficulty')}</td>
+                  <td className="text-right">{info && info.difficulty}</td>
+                </tr>
+                <tr>
+                  <td>{t('Network')}</td>
+                  <td className="text-right">{info && info.network}</td>
+                </tr>
+                <tr>
+                  <td>{t('Proxy setting')}</td>
+                  <td className="text-right">{info && info.proxy}</td>
+                </tr>
+                <tr>
+                  <td>{t('Info Errors')}</td>
+                  <td className="text-right">{info && info.errors}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </aside>
       </div>
     </section>
   );

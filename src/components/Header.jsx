@@ -32,8 +32,8 @@ export default function Header() {
             <span className="icon-bar" />
             <span className="icon-bar" />
           </button>
-          <Link className="insight navbar-brand" to="/" title="Explorer">
-            <img id="brandImg" src="/img/logo-mark.svg" alt="Explorer" />
+          <Link className="navbar-brand" to="/" title="Pirate Chain Explorer">
+            <img id="brandImg" src="/img/logo-mark.svg" alt="Pirate Chain Explorer" />
           </Link>
         </div>
         <div className={'navbar-collapse collapse' + (collapsed ? '' : ' in')}>

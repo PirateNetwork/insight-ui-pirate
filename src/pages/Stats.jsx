@@ -105,37 +105,39 @@ export default function Stats() {
             </table>
           </div>
 
-          <div className="col-xs-12 col-md-4 col-gray">
-            <h2>{t('Network')}</h2>
-            <table className="table">
-              <tbody>
-                <tr>
-                  <td>{t('NetHash')}</td>
-                  <td className="text-right">{formatSolutionRate(stats.networkSolps)}</td>
-                </tr>
-                <tr>
-                  <td>{t('Difficulty')}</td>
-                  <td className="text-right">{round(stats.difficulty, 2)}</td>
-                </tr>
-              </tbody>
-            </table>
+          <aside className="col-xs-12 col-md-4">
+            <div className="side-card">
+              <h2>{t('Network')}</h2>
+              <table className="table">
+                <tbody>
+                  <tr>
+                    <td>{t('NetHash')}</td>
+                    <td className="text-right">{formatSolutionRate(stats.networkSolps)}</td>
+                  </tr>
+                  <tr>
+                    <td>{t('Difficulty')}</td>
+                    <td className="text-right">{round(stats.difficulty, 2)}</td>
+                  </tr>
+                </tbody>
+              </table>
 
-            <h2>{t('Price')}</h2>
-            <table className="table">
-              <tbody>
-                <tr>
-                  <td>{t('Price (USD)')}</td>
-                  <td className="text-right">{priceUsd != null ? '$' + round(priceUsd, 6) : ''}</td>
-                </tr>
-                <tr>
-                  <td>{t('Market Cap (USD)')}</td>
-                  <td className="text-right">
-                    {marketCapUsd != null ? '$' + Math.round(marketCapUsd).toLocaleString() : ''}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              <h2>{t('Price')}</h2>
+              <table className="table">
+                <tbody>
+                  <tr>
+                    <td>{t('Price (USD)')}</td>
+                    <td className="text-right">{priceUsd != null ? '$' + round(priceUsd, 6) : ''}</td>
+                  </tr>
+                  <tr>
+                    <td>{t('Market Cap (USD)')}</td>
+                    <td className="text-right">
+                      {marketCapUsd != null ? '$' + Math.round(marketCapUsd).toLocaleString() : ''}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </aside>
         </div>
       )}
     </section>

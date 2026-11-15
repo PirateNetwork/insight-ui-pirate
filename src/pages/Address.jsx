@@ -60,7 +60,7 @@ export default function Address() {
       {address && (
         <div>
           <div className="well well-sm ellipsis">
-            <strong>{t('Address')}</strong> <span className="text-muted">{address.addrStr}</span>
+            <strong>{t('Address')}</strong> <span className="hash text-muted">{address.addrStr}</span>
             <CopyButton text={address.addrStr} />
           </div>
           <h2>{t('Summary')} <small>confirmed</small></h2>

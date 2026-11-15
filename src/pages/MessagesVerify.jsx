@@ -135,10 +135,12 @@ export default function MessagesVerify() {
             </div>
           )}
         </div>
-        <div className="col-xs-12 col-md-4 col-gray">
-          <p>{t('Komodo comes with a way of signing arbitrary messages.')}</p>
-          <p>{t('This form can be used to verify that a message comes from a specific Komodo address.')}</p>
-        </div>
+        <aside className="col-xs-12 col-md-4">
+          <div className="side-card">
+            <p>{t('Pirate Chain comes with a way of signing arbitrary messages.')}</p>
+            <p>{t('This form can be used to verify that a message comes from a specific Pirate Chain address.')}</p>
+          </div>
+        </aside>
       </div>
     </section>
   );

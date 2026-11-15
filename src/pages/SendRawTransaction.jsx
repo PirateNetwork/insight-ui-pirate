@@ -95,9 +95,11 @@ export default function SendRawTransaction() {
             </div>
           )}
         </div>
-        <div className="col-xs-12 col-md-4 col-gray">
-          <p>{t('This form can be used to broadcast a raw transaction in hex format over the Komodo network.')}</p>
-        </div>
+        <aside className="col-xs-12 col-md-4">
+          <div className="side-card">
+            <p>{t('This form can be used to broadcast a raw transaction in hex format over the Pirate Chain network.')}</p>
+          </div>
+        </aside>
       </div>
     </section>
   );

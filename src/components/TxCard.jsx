@@ -63,7 +63,7 @@ export default function TxCard({tx, currentAddr}) {
             >
               <span className={'glyphicon ' + (expanded ? 'glyphicon-minus-sign' : 'glyphicon-plus-sign')} />
             </a>{' '}
-            <Link to={'/tx/' + tx.txid}>{tx.txid}</Link>
+            <Link className="hash" to={'/tx/' + tx.txid}>{tx.txid}</Link>
             <CopyButton text={tx.txid} />
           </div>
         </div>
@@ -286,7 +286,7 @@ export default function TxCard({tx, currentAddr}) {
 
       {tx.blockhash && (
         <div className="well well-sm bgwhite ellipsis">
-          <strong>{t('Included in Block')}</strong> <Link className="text-muted" to={'/block/' + tx.blockhash}>{tx.blockhash}</Link>
+          <strong>{t('Included in Block')}</strong> <Link className="hash text-muted" to={'/block/' + tx.blockhash}>{tx.blockhash}</Link>
           <CopyButton text={tx.blockhash} />
         </div>
       )}

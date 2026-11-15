@@ -31,46 +31,48 @@ export default function Blocks() {
 
   return (
     <div className="row">
-      <div className="col-xs-12 col-md-3 col-gray col-gray-fixed">
-        <div className="block-id">
-          <div className="icon-block text-center">
-            <span className="glyphicon glyphicon-list" />
-            <h3>
-              <span>{t('Blocks')}</span> <br />
-              <span>{t('mined on:')}</span>
-            </h3>
-          </div>
-        </div>
-        <p className="lead text-center m20v">
-          {pagination ? pagination.current : ''} UTC
-          <input
-            type="date"
-            className="btn btn-primary btn-xs"
-            onChange={(e) => {
-              if (e.target.value) navigate('/blocks-date/' + e.target.value);
-            }}
-          />
-        </p>
-        {!pagination && <div className="m20v text-center text-muted">{t('Loading Selected Date...')}</div>}
-        {pagination && (
-          <div>
-            {pagination.isToday && !loading && <p className="text-center m20v">{t('Today')}</p>}
-            {!pagination.isToday && !loading && (
-              <p className="text-center m20v">{humanSinceDay(pagination.currentTs)}</p>
-            )}
-            <div className="m50v text-center">
-              <Link className="btn btn-primary" to={'/blocks-date/' + pagination.prev}>
-                <small>&larr; {pagination.prev}</small>
-              </Link>
-              {!pagination.isToday && (
-                <Link className="btn btn-primary" to={'/blocks-date/' + pagination.next}>
-                  <small>{pagination.next} &rarr;</small>
-                </Link>
-              )}
+      <aside className="col-xs-12 col-md-3">
+        <div className="side-card">
+          <div className="block-id">
+            <div className="icon-block text-center">
+              <span className="glyphicon glyphicon-list" />
+              <h3>
+                <span>{t('Blocks')}</span> <br />
+                <span>{t('mined on:')}</span>
+              </h3>
             </div>
           </div>
-        )}
-      </div>
+          <p className="lead text-center m20v">
+            {pagination ? pagination.current : ''} UTC
+            <input
+              type="date"
+              className="btn btn-primary btn-xs"
+              onChange={(e) => {
+                if (e.target.value) navigate('/blocks-date/' + e.target.value);
+              }}
+            />
+          </p>
+          {!pagination && <div className="m20v text-center text-muted">{t('Loading Selected Date...')}</div>}
+          {pagination && (
+            <div>
+              {pagination.isToday && !loading && <p className="text-center m20v">{t('Today')}</p>}
+              {!pagination.isToday && !loading && (
+                <p className="text-center m20v">{humanSinceDay(pagination.currentTs)}</p>
+              )}
+              <div className="m50v text-center">
+                <Link className="btn btn-primary" to={'/blocks-date/' + pagination.prev}>
+                  <small>&larr; {pagination.prev}</small>
+                </Link>
+                {!pagination.isToday && (
+                  <Link className="btn btn-primary" to={'/blocks-date/' + pagination.next}>
+                    <small>{pagination.next} &rarr;</small>
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </aside>
       <div className="col-xs-12 col-md-9">
         <div className="page-header">
           <h1>

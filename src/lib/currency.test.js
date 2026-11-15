@@ -1,5 +1,5 @@
 import {describe, it, expect} from 'vitest';
-import {roundFloat, convert} from './currency';
+import {roundFloat, convert, currencyOptions, normalizeStoredSymbol} from './currency';
 
 describe('roundFloat', () => {
   it('rounds to n decimal places', () => {
@@ -28,6 +28,12 @@ describe('convert', () => {
     expect(convert(1.5, {symbol: netSymbol, factor: 1, netSymbol})).toBe('1.5 ' + netSymbol);
   });
 
+  it('falls back to the native unit while the USD rate is unknown or zero', () => {
+    expect(convert(2, {symbol: 'USD', factor: 0, netSymbol})).toBe('2 ' + netSymbol);
+    expect(convert(2, {symbol: 'USD', factor: undefined, netSymbol})).toBe('2 ' + netSymbol);
+    expect(convert(0, {symbol: 'USD', factor: 0, netSymbol})).toBe('0 ' + netSymbol);
+  });
+
   it('converts to USD using the pre-fetched factor, rounded to 2dp', () => {
     expect(convert(2, {symbol: 'USD', factor: 0.12345, netSymbol})).toBe('0.25 USD');
   });
@@ -36,12 +42,37 @@ describe('convert', () => {
     expect(convert(0.000001234567, {symbol: 'm' + netSymbol, factor: 1, netSymbol})).toBe('0.00123 m' + netSymbol);
   });
 
-  it('converts to bits (factor 1e6), rounded to 2dp', () => {
-    expect(convert(0.000001234567, {symbol: 'bits', factor: 1, netSymbol})).toBe('1.23 bits');
-  });
-
   it('avoids scientific notation for very small results', () => {
     const result = convert(0.00000000005, {symbol: netSymbol, factor: 1, netSymbol});
     expect(result).not.toMatch(/e-/);
+  });
+});
+
+describe('currencyOptions', () => {
+  it('offers USD, the native unit and its milli-unit', () => {
+    expect(currencyOptions('ARRR')).toEqual(['USD', 'ARRR', 'mARRR']);
+  });
+});
+
+describe('normalizeStoredSymbol', () => {
+  it('defaults to the native unit when nothing is saved', () => {
+    expect(normalizeStoredSymbol(null, 'ARRR')).toBe('ARRR');
+  });
+
+  it('keeps a saved choice that is still offered', () => {
+    expect(normalizeStoredSymbol('USD', 'ARRR')).toBe('USD');
+    expect(normalizeStoredSymbol('ARRR', 'ARRR')).toBe('ARRR');
+    expect(normalizeStoredSymbol('mARRR', 'ARRR')).toBe('mARRR');
+  });
+
+  it('maps the retired PIRATE labels onto ARRR', () => {
+    expect(normalizeStoredSymbol('PIRATE', 'ARRR')).toBe('ARRR');
+    expect(normalizeStoredSymbol('mPIRATE', 'ARRR')).toBe('mARRR');
+  });
+
+  it('falls back to the native unit for retired or unknown units', () => {
+    expect(normalizeStoredSymbol('bits', 'ARRR')).toBe('ARRR');
+    expect(normalizeStoredSymbol('KMD', 'ARRR')).toBe('ARRR');
+    expect(normalizeStoredSymbol('', 'ARRR')).toBe('ARRR');
   });
 });

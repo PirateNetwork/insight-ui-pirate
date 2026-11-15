@@ -20,10 +20,6 @@ export function getChainStats() {
   return apiGet('/chain-stats');
 }
 
-export function getVersion() {
-  return apiGet('/version');
-}
-
-export function getIronwoodActivation() {
-  return apiGet('/ironwood-activation');
+export function getNetworkUpgrades() {
+  return apiGet('/network-upgrades');
 }

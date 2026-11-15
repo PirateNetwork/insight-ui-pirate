@@ -59,25 +59,27 @@ export default function Charts() {
   return (
     <section>
       <div className="row">
-        <div className="col-xs-12 col-md-3 col-gray col-gray-fixed">
-          <div className="block-id">
-            <div className="icon-block text-center">
-              <span className="glyphicon glyphicon-stats" />
-              <h3>
-                <span>{t('Charts')}</span>
-              </h3>
+        <aside className="col-xs-12 col-md-3">
+          <div className="side-card">
+            <div className="block-id">
+              <div className="icon-block text-center">
+                <span className="glyphicon glyphicon-stats" />
+                <h3>
+                  <span>{t('Charts')}</span>
+                </h3>
+              </div>
+            </div>
+            <div className="m20v text-center">
+              {Object.entries(charts).map(([type, c]) => (
+                <span className="fader" key={type}>
+                  <Link className="btn btn-primary" style={{marginBottom: 3}} to={'/charts/' + type}>
+                    {c.name}
+                  </Link>
+                </span>
+              ))}
             </div>
           </div>
-          <div className="m20v text-center">
-            {Object.entries(charts).map(([type, c]) => (
-              <span className="fader" key={type}>
-                <Link className="btn btn-primary" style={{marginBottom: 3}} to={'/charts/' + type}>
-                  {c.name}
-                </Link>
-              </span>
-            ))}
-          </div>
-        </div>
+        </aside>
         <div className="col-xs-12 col-md-9">
           <div className="page-header">
             <h1>

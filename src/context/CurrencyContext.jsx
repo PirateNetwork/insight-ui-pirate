@@ -1,28 +1,32 @@
 import {createContext, useCallback, useContext, useEffect, useState} from 'react';
 import {getCurrency} from '../api/currency';
-import {convert} from '../lib/currency';
+import {convert, currencyOptions, normalizeStoredSymbol} from '../lib/currency';
 
-// This fork's coin ticker, used as the "native unit" currency option -
-// explorer.piratechain.com displays amounts as e.g. "0.25 PIRATE", not
-// the Komodo-forked codebase's original 'KMD'.
-export const NET_SYMBOL = 'PIRATE';
+// Pirate Chain's ticker, used as the native-unit currency option.
+export const NET_SYMBOL = 'ARRR';
 
 const CurrencyContext = createContext(null);
 
 export function CurrencyProvider({children}) {
-  const [symbol, setSymbol] = useState(
-    localStorage.getItem('insight-currency') || NET_SYMBOL
+  const [symbol, setSymbol] = useState(() =>
+    normalizeStoredSymbol(localStorage.getItem('insight-currency'), NET_SYMBOL)
   );
-  const [factor, setFactor] = useState(1);
+  // Only USD uses this (convert() fixes the native and milli units' own
+  // factors); 0 means the USD rate hasn't loaded yet.
+  const [factor, setFactor] = useState(0);
   const [bitstamp, setBitstamp] = useState(0);
 
   const refreshUsdFactor = useCallback(() => {
-    getCurrency().then((res) => {
-      setBitstamp(res.data.bitstamp);
-      if (symbol === 'USD') {
-        setFactor(res.data.bitstamp);
-      }
-    });
+    getCurrency()
+      .then((res) => {
+        setBitstamp(res.data.bitstamp);
+        if (symbol === 'USD') {
+          setFactor(res.data.bitstamp);
+        }
+      })
+      .catch(() => {
+        // Leave the rate unset - amounts stay in the native unit.
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -34,14 +38,17 @@ export function CurrencyProvider({children}) {
     setSymbol(newSymbol);
     localStorage.setItem('insight-currency', newSymbol);
     if (newSymbol === 'USD') {
-      getCurrency().then((res) => {
-        setBitstamp(res.data.bitstamp);
-        setFactor(res.data.bitstamp);
-      });
+      setFactor(0);
+      getCurrency()
+        .then((res) => {
+          setBitstamp(res.data.bitstamp);
+          setFactor(res.data.bitstamp);
+        })
+        .catch(() => {
+          // Leave the rate unset - amounts stay in the native unit.
+        });
     } else if (newSymbol === 'm' + NET_SYMBOL) {
       setFactor(1000);
-    } else if (newSymbol === 'bits') {
-      setFactor(1000000);
     } else {
       setFactor(1);
     }
@@ -52,6 +59,7 @@ export function CurrencyProvider({children}) {
     factor,
     bitstamp,
     netSymbol: NET_SYMBOL,
+    options: currencyOptions(NET_SYMBOL),
     setCurrency,
     getConvertion: (v) => convert(v, {symbol, factor, netSymbol: NET_SYMBOL})
   };

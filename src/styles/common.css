@@ -1,5 +1,3 @@
-/* Sticky footer styles
--------------------------------------------------- */
 @charset "UTF-8";
 
 /* Pirate Chain brand palette (see piratechain.com/canvas media kit:
@@ -13,22 +11,59 @@
   --pc-gold: #bb9645;
   --pc-gold-strong: #d3b06d;
   --pc-gold-muted: #a99a78;
-  --pc-text: #eee8da;
-  --pc-text-dim: #9496a8;
+  --pc-text: #e9e6df;
+  --pc-text-dim: #a2a6ad;
+
+  /* Brand typography (piratechain.com's branding page): Bai Jamjuree for
+     headings and navigation, Roboto for body text, IBM Plex Mono for
+     hashes and addresses. All three are bundled locally (see main.jsx). */
+  --pc-font-heading: 'Bai Jamjuree', 'Roboto', sans-serif;
+  --pc-font-body: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --pc-font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
 }
 
 html,
 body {
   background-color: var(--pc-bg);
   color: var(--pc-text);
-  font-family: 'Bai Jamjuree', 'Ubuntu', sans-serif;
+  font-family: var(--pc-font-body);
   height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* Sticky footer: the page column grows to fill the viewport, so the
+   footer sits at the bottom on short pages and after the content on
+   long ones. */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+#wrap {
+  flex: 1 0 auto;
+  padding-bottom: 40px;
+}
+#footer {
+  flex-shrink: 0;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   color: var(--pc-gold-strong);
-  font-family: 'Bai Jamjuree', 'Ubuntu', sans-serif;
+  font-family: var(--pc-font-heading);
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+h1, .h1 { font-size: 30px; margin: 8px 0 18px; }
+h2, .h2 { font-size: 24px; margin: 32px 0 14px; }
+h3, .h3 { font-size: 19px; }
+
+.hash, .txid {
+  font-family: var(--pc-font-mono);
+  font-size: 13px;
 }
 
 a {
@@ -98,16 +133,6 @@ p, .subIntro, label, .control-label {
 }
 #file-input-wrapper i { display: none; }
 
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -51px;
-  /* Pad bottom by footer height */
-  padding: 0 0 75px;
-}
-
 .m10h { margin: 0 10px; }
 .m20h { margin: 0 20px; }
 .m5v { margin: 5px 0; }
@@ -135,8 +160,17 @@ margin-left: 0;
   color: var(--pc-text);
 }
 .table > thead > tr > th {
-  color: var(--pc-gold);
+  color: var(--pc-text-dim);
+  font-size: 13px;
+  font-weight: 500;
   border-bottom: 1px solid var(--pc-border);
+}
+.table > tbody > tr > td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#home .col-value {
+  width: 150px;
 }
 .table > tbody > tr > td, .table > tbody > tr > th,
 .table > thead > tr > td,
@@ -237,6 +271,47 @@ margin-left: 0;
   text-decoration: underline;
 }
 
+/* Network-upgrade notice (components/UpgradeBanner.jsx): a quiet gold
+   outline pill rather than a full-width Bootstrap alert. */
+.upgrade-banners {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 24px;
+}
+.upgrade-banner {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 10px;
+  max-width: 100%;
+  padding: 6px 18px;
+  border: 1px solid rgba(187, 150, 69, 0.45);
+  border-radius: 18px;
+  background-color: rgba(187, 150, 69, 0.06);
+  color: var(--pc-text);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+.upgrade-banner strong {
+  color: var(--pc-gold-strong);
+  font-weight: 600;
+}
+.upgrade-banner-muted {
+  color: var(--pc-text-dim);
+}
+.upgrade-banner-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--pc-gold);
+  box-shadow: 0 0 0 3px rgba(187, 150, 69, 0.18);
+}
+
 .btc-value {
   color: var(--pc-gold-strong);
   font-weight: 600;
@@ -260,11 +335,55 @@ margin-left: 0;
   border-top: 0;
 }
 
-.navbar-default .navbar-nav>li>a {
+.navbar-default .navbar-nav>li>a,
+.navbar-default .navbar-nav>li>.dropdown-toggle {
   color: var(--pc-text-dim);
-  font-family: 'Bai Jamjuree', 'Ubuntu', sans-serif;
-  padding-left: 14px;
-  padding-right: 14px;
+  font-family: var(--pc-font-heading);
+  font-weight: 500;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* Bootstrap darkens a focused nav link to #333 on a light grey
+   background, meant for its light navbar - keep it on-theme. */
+.navbar-default .navbar-nav>li>a:focus {
+  color: var(--pc-text-dim);
+  background-color: transparent;
+}
+
+/* Unit selector (CurrencySelector.jsx) - real buttons styled like the
+   neighbouring nav links. */
+.currency-selector .dropdown-toggle {
+  display: block;
+  background: transparent;
+  border: 0;
+  line-height: 20px;
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+.navbar-default .navbar-nav>li.currency-selector>.dropdown-toggle:hover,
+.navbar-default .navbar-nav>li.currency-selector.open>.dropdown-toggle {
+  color: var(--pc-gold-strong);
+}
+.currency-selector .dropdown-toggle:focus-visible,
+.currency-selector .dropdown-menu button:focus-visible {
+  outline: 2px solid var(--pc-gold);
+  outline-offset: -2px;
+}
+.currency-selector .dropdown-menu > li > button {
+  display: block;
+  width: 100%;
+  padding: 6px 20px;
+  background: transparent;
+  border: 0;
+  color: var(--pc-text-dim);
+  text-align: left;
+  white-space: nowrap;
+}
+.currency-selector .dropdown-menu > li > button:hover,
+.currency-selector .dropdown-menu > li > button.active {
+  background-color: var(--pc-bg-card);
+  color: var(--pc-gold-strong);
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus {
@@ -318,30 +437,12 @@ margin-left: 0;
   color: #14151f;
 }
 
-.insight {
-  font-family: 'Bai Jamjuree', 'Ubuntu', sans-serif;
-  font-size: 34px;
-  font-style: italic;
-  font-weight: 700;
-  overflow: hidden;
-  color: var(--pc-gold);
-}
-
-.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: var(--pc-gold-strong);
-}
-
+/* Logo mark: vertically centred in the 64px bar, its left edge on the
+   same line as the page content below (Bootstrap pulls the brand 15px
+   left, and this padding puts it back). */
 .navbar-default .navbar-brand {
-  color: var(--pc-gold);
-  padding: 9px 5px 0 5px;
-}
-
-  .navbar-brand {
-    float: left;
-    padding: 15px;
-    font-size: 18px;
-    line-height: 20px;
-    height: 55px;
+  height: 64px;
+  padding: 18px 15px;
 }
 
 .navbar-form .form-control {
@@ -380,53 +481,58 @@ margin-left: 0;
 
 #search { color: var(--pc-text); }
 
-#search::-webkit-input-placeholder {
+#search::placeholder {
   color: var(--pc-text-dim);
-  font-family: 'Bai Jamjuree', 'Ubuntu', sans-serif;
-  font-style: italic;
-  font-weight: 100;
-}
-
-#search::-moz-placeholder {
-  color: var(--pc-text-dim);
-  font-family: 'Bai Jamjuree', 'Ubuntu', sans-serif;
-  font-weight: 100;
+  font-family: var(--pc-font-body);
+  font-size: 13px;
 }
 
 .status {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   background-color: var(--pc-bg-card);
   border: 1px solid var(--pc-border);
-  border-radius: 3px;
-  margin: 15px 0;
-  padding: 8px 10px;
+  border-radius: 4px;
+  margin: 15px 10px 15px 0;
+  padding: 7px 12px;
   font-size: 12px;
+  color: var(--pc-text-dim);
+}
+.status strong {
+  color: var(--pc-text);
+  font-weight: 500;
+  margin-right: 2px;
+}
+.status .glyphicon-ok {
   color: var(--pc-gold);
-  text-align: center;
-  margin-right: 10px;
 }
 
 .status .tooltip {
   margin: 0;
 }
 
-.col-gray {
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
+/* Sidebar card. It sits inside its grid column (rather than colouring
+   the column itself) so its edges line up with the header and footer. */
+.side-card {
   background-color: var(--pc-bg-card);
-  border-radius: 5px;
-  padding: 14px;
   border: 1px solid var(--pc-border);
+  border-radius: 8px;
+  padding: 18px 20px;
 }
-
-.col-gray-responsive {
-  width: auto;
+.side-card > :first-child {
+  margin-top: 0;
 }
-
-.col-gray-fixed {
-  margin-top: 15px;
-  border: 1px solid var(--pc-border);
+.side-card > :last-child {
+  margin-bottom: 0;
+}
+.side-links {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+.side-links li + li {
+  margin-top: 6px;
 }
 
 .ellipsis {
@@ -574,45 +680,68 @@ margin-left: 0;
 }
 .progress-bar-info { background-color: var(--pc-gold); }
 
-/* Set the fixed height of the footer here */
 #footer {
   background-color: var(--pc-bg-elevated);
   border-top: 1px solid var(--pc-border);
   color: var(--pc-text-dim);
-  height: 51px;
-  overflow: hidden;
+  padding: 20px 0 16px;
 }
-
-#footer a.insight {
-  font-size: 20px;
-  text-decoration: none;
-  color: var(--pc-gold);
+#footer .footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 24px;
 }
-
-#footer a.insight:hover {
+#footer .footer-row-secondary {
+  border-top: 1px solid var(--pc-border);
+  margin-top: 16px;
+  padding-top: 12px;
+  font-size: 12px;
+}
+#footer .footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   color: var(--pc-gold-strong);
+  font-family: var(--pc-font-heading);
+  font-size: 16px;
+  font-weight: 600;
 }
-
-#footer a.insight small { font-size: 11px; }
-.line-footer { border-top: 2px dashed var(--pc-border); }
-
-#footer .links {
-  color: var(--pc-text-dim);
-  font-size: 10px;
+#footer .footer-brand img {
+  height: 22px;
 }
-
-#footer .links a {
-  color: var(--pc-text-dim);
-}
-
-#footer .links a.selected {
-  color: var(--pc-gold);
-  font-weight: bold;
-}
-
-#footer .links a:hover {
+#footer .footer-brand:hover {
   text-decoration: none;
+}
+#footer .footer-links,
+#footer .footer-tools,
+#footer .footer-languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+}
+#footer .footer-links a {
+  color: var(--pc-text);
+  font-size: 13px;
+}
+#footer .footer-tools a,
+#footer .footer-languages button {
+  color: var(--pc-text-dim);
+}
+#footer .footer-languages button {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+#footer a:hover,
+#footer .footer-languages button:hover {
   color: var(--pc-gold-strong);
+  text-decoration: none;
+}
+#footer .footer-languages button.selected {
+  color: var(--pc-gold);
+  font-weight: 500;
 }
 
 .line-bot {
@@ -629,9 +758,7 @@ margin-left: 0;
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
-#wrap > .container { padding: 70px 15px 0; }
-
-#footer > .container { padding: auto 15px; }
+#wrap > .container { padding: 92px 15px 0; }
 
 .code { font-size: 80%; }
 
@@ -783,46 +910,6 @@ margin-left: 0;
   margin-top: -23px;
 }
 
-#powered .powered-text {
-  border-top: 1px solid var(--pc-border);
-  margin: 30px auto 0;
-  text-align: center;
-  width: 90%;
-}
-#powered .powered-text small {
-  background-color: var(--pc-bg);
-  padding: 4px;
-  position: relative;
-  top: -12px;
-}
-
-#powered a {
-  background-repeat: no-repeat;
-  background-position: center center;
-  display: inline-block;
-  height: 80px;
-}
-#powered a.supernet {
-  background-image: url('/img/supernet.png');
-  background-size: 80px;
-  width: 100%;
-}
-#powered a.nodejs {
-  background-image: url('/img/nodejs.png');
-  background-size: 80px;
-  width: 30%;
-}
-#powered a.angularjs {
-  background-image: url('/img/angularjs.png');
-  background-size: 50px;
-  width: 20%;
-}
-#powered a.leveldb {
-  background-image: url('/img/leveldb.png');
-  background-size: 50px;
-  width: 20%;
-}
-
 @keyframes rotateThis {
 	from { transform: scale( 1 ) rotate( 0deg );   }
 	to   { transform: scale( 1 ) rotate( 360deg ); }
@@ -906,20 +993,14 @@ a.v_highlight_more {
 }
 
 @media (max-width: 991px) {
-  .status {
-    display: none;
-  }
   .navbar-form {
     width: auto;
   }
   .btn-copy {
     display: none;
   }
-  .col-gray-fixed {
-    position:static;
-    width: 100%;
-    margin-top: 0;
-    padding: 0;
+  .side-card {
+    margin-top: 24px;
   }
   .m50v {
     margin: 15px 0;
@@ -932,22 +1013,17 @@ a.v_highlight_more {
     font-size: initial;
     margin: 10px 0;
   }
-  body {
-    font-size: 12px;
-  }
   h1 {
     font-size: 26px;
   }
   h2 {
-    font-size: 22px;
+    font-size: 21px;
   }
   h3 {
     font-size: 18px;
   }
-  .insight {
-    font-size: 30px;
-  }
-  .navbar-default .navbar-nav>li>a {
+  .navbar-default .navbar-nav>li>a,
+  .navbar-default .navbar-nav>li>.dropdown-toggle {
     padding-left: 15px;
     padding-right: 15px;
   }
@@ -957,17 +1033,14 @@ a.v_highlight_more {
   .navbar-form {
     width: auto;
   }
-  .status {
-    display: none;
-  }
   #wrap>.container {
-    padding: 50px 15px 0;
+    padding: 70px 15px 0;
   }
   #ngProgress-container {
     top: 50px;
   }
   body {
-    font-size: 11px;
+    font-size: 13px;
   }
   h1 {
     font-size: 24px;
@@ -976,19 +1049,19 @@ a.v_highlight_more {
     font-size: 20px;
   }
   .navbar-default .navbar-brand {
-    padding: 5px;
+    height: 50px;
+    padding: 12px 15px;
   }
-
-  .insight {
-    font-size: 26px;
+  #brandImg {
+    height: 26px;
+  }
+  .currency-selector .dropdown-toggle {
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
   .navbar-nav>li>a {
     padding-top: 15px;
     padding-bottom: 15px;
-  }
-  .container {
-    padding-left: 0;
-    padding-right: 0;
   }
   .navbar-default .navbar-toggle {
     margin-top: 7px;
@@ -1033,29 +1106,28 @@ a.v_highlight_more {
   }
 }
 
-@media (min-width: 1200px) {
-  .col-gray-fixed {
-    width: 280px;
+/* The Conn/Height/Notarized badge only fits beside the search box at the
+   widest Bootstrap container; below that it would wrap the fixed navbar
+   onto a second line over the page. The same figures are on /status. */
+@media (max-width: 1199px) {
+  .status {
+    display: none;
   }
+}
+
+@media (min-width: 1200px) {
   .navbar-form .form-control {
-    width: 230px;
+    width: 260px;
   }
 }
 
 /* Pirate Explorer Misc CSS
 -------------------------------------------------- */
 #brandImg {
-  height: 40px;
-}
-
-#brandImgLg {
-  width: 100%;
-}
-
-#intro {
-  font-size:20px;
+  height: 28px;
 }
 
 .subIntro {
-  font-size: 16px
+  font-size: 14px;
+  line-height: 1.65;
 }
