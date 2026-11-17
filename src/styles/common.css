@@ -63,6 +63,35 @@ h3, .h3 { font-size: 19px; }
   font-family: var(--pc-font-mono);
   font-size: 13px;
 }
+/* A label/hash table (Status page's Last Block). On wide screens the
+   label column is sized so the longest translated label and a full
+   64-character hash each fit on one line. Narrower screens can't fit
+   both side by side, so each row stacks: label, then the full-width
+   hash, which wraps rather than being cut off. */
+.hash-table col.label-col {
+  width: 266px;
+}
+.hash-cell {
+  word-break: break-all;
+}
+.hash-cell .hash {
+  font-size: 12px;
+}
+@media (max-width: 1199px) {
+  .hash-table col.label-col {
+    width: auto;
+  }
+  .hash-table,
+  .hash-table > tbody,
+  .hash-table > tbody > tr,
+  .hash-table > tbody > tr > td {
+    display: block;
+  }
+  .hash-table > tbody > tr > td.hash-cell {
+    text-align: left;
+    padding-top: 0;
+  }
+}
 
 a {
   color: var(--pc-gold);

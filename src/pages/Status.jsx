@@ -117,18 +117,30 @@ export default function Status() {
           </table>
 
           <h2>{t('Last Block')}</h2>
-          <table className="table" style={{tableLayout: 'fixed'}}>
+          <table className="table hash-table" style={{tableLayout: 'fixed'}}>
+            <colgroup>
+              <col className="label-col" />
+              <col />
+            </colgroup>
             <tbody>
               <tr>
                 <td>{t('Last Block Hash (pirated)')}</td>
-                <td className="text-right ellipsis">
-                  {lastBlock && <Link to={'/block/' + lastBlock.lastblockhash}>{lastBlock.lastblockhash}</Link>}
+                <td className="text-right hash-cell">
+                  {lastBlock && (
+                    <Link className="hash" to={'/block/' + lastBlock.lastblockhash}>
+                      {lastBlock.lastblockhash}
+                    </Link>
+                  )}
                 </td>
               </tr>
               <tr>
                 <td>{t('Current Blockchain Tip (insight)')}</td>
-                <td className="text-right ellipsis">
-                  {lastBlock && <Link to={'/block/' + lastBlock.syncTipHash}>{lastBlock.syncTipHash}</Link>}
+                <td className="text-right hash-cell">
+                  {lastBlock && (
+                    <Link className="hash" to={'/block/' + lastBlock.syncTipHash}>
+                      {lastBlock.syncTipHash}
+                    </Link>
+                  )}
                 </td>
               </tr>
             </tbody>
