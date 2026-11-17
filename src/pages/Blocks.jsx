@@ -2,10 +2,10 @@ import {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {getBlocks} from '../api/blocks';
-import {humanSinceDay} from '../lib/time';
+import {humanSinceDay, intlLocale} from '../lib/time';
 
 export default function Blocks() {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const {blockDate, startTimestamp} = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -33,43 +33,42 @@ export default function Blocks() {
     <div className="row">
       <aside className="col-xs-12 col-md-3">
         <div className="side-card">
-          <div className="block-id">
-            <div className="icon-block text-center">
-              <span className="glyphicon glyphicon-list" />
-              <h3>
-                <span>{t('Blocks')}</span> <br />
-                <span>{t('mined on:')}</span>
-              </h3>
-            </div>
-          </div>
-          <p className="lead text-center m20v">
-            {pagination ? pagination.current : ''} UTC
-            <input
-              type="date"
-              className="btn btn-primary btn-xs"
-              onChange={(e) => {
-                if (e.target.value) navigate('/blocks-date/' + e.target.value);
-              }}
-            />
-          </p>
-          {!pagination && <div className="m20v text-center text-muted">{t('Loading Selected Date...')}</div>}
+          <h2 className="side-title">
+            <span className="glyphicon glyphicon-list" aria-hidden="true" /> {t('Blocks')} {t('mined on:')}
+          </h2>
+          {!pagination && <p className="text-muted">{t('Loading Selected Date...')}</p>}
           {pagination && (
-            <div>
-              {pagination.isToday && !loading && <p className="text-center m20v">{t('Today')}</p>}
-              {!pagination.isToday && !loading && (
-                <p className="text-center m20v">{humanSinceDay(pagination.currentTs)}</p>
-              )}
-              <div className="m50v text-center">
-                <Link className="btn btn-primary" to={'/blocks-date/' + pagination.prev}>
-                  <small>&larr; {pagination.prev}</small>
+            <>
+              <p className="side-date">
+                {pagination.current} UTC
+                {!loading && (
+                  <span className="text-muted">
+                    {' '}
+                    &middot; {pagination.isToday ? t('Today') : humanSinceDay(pagination.currentTs, intlLocale(i18n.language))}
+                  </span>
+                )}
+              </p>
+              {/* Left empty: a pre-filled date input becomes a valid new
+                  date on a single keystroke and would navigate mid-typing. */}
+              <input
+                type="date"
+                className="form-control input-sm"
+                aria-label={t('Choose a date')}
+                onChange={(e) => {
+                  if (e.target.value) navigate('/blocks-date/' + e.target.value);
+                }}
+              />
+              <div className="side-pager">
+                <Link className="btn btn-default btn-sm" to={'/blocks-date/' + pagination.prev}>
+                  &larr; {pagination.prev}
                 </Link>
                 {!pagination.isToday && (
-                  <Link className="btn btn-primary" to={'/blocks-date/' + pagination.next}>
-                    <small>{pagination.next} &rarr;</small>
+                  <Link className="btn btn-default btn-sm" to={'/blocks-date/' + pagination.next}>
+                    {pagination.next} &rarr;
                   </Link>
                 )}
               </div>
-            </div>
+            </>
           )}
         </div>
       </aside>
@@ -105,7 +104,7 @@ export default function Blocks() {
                 <td>
                   <Link to={'/block/' + b.hash}>{b.height}</Link>
                 </td>
-                <td>{new Date(b.time * 1000).toLocaleString()}</td>
+                <td>{new Date(b.time * 1000).toLocaleString(intlLocale(i18n.language))}</td>
                 <td className="text-right">{b.txlength}</td>
                 <td className="text-right hidden-xs">
                   {b.poolInfo && b.poolInfo.poolName && (

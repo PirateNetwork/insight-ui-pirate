@@ -21,9 +21,7 @@ function BannerText({banner}) {
     <>
       <strong>{t('{{name}} network upgrade', {name})}</strong>
       <span>
-        {banner.blocksRemaining === 1
-          ? t('1 block remaining')
-          : t('{{count}} blocks remaining', {count: banner.blocksRemaining})}
+        {t('{{count}} blocks remaining', {count: banner.blocksRemaining})}
       </span>
       <span className="upgrade-banner-muted">
         {t('activates at block {{height}}', {height: banner.activationHeight})}

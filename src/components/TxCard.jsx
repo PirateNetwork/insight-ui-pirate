@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useCurrency} from '../context/CurrencyContext';
 import {aggregateItems, computePoolFlows} from '../lib/transactions';
+import {intlLocale} from '../lib/time';
 import CopyButton from './CopyButton';
 
 const POOL_LABELS = {
@@ -15,13 +16,13 @@ const POOL_LABELS = {
 function poolCountLabel(t, pool) {
   switch (pool.key) {
     case 'transparent':
-      return pool.counts.in + ' ' + t('in') + ', ' + pool.counts.out + ' ' + t('out');
+      return t('{{count}} input', {count: pool.counts.in}) + ', ' + t('{{count}} output', {count: pool.counts.out});
     case 'sprout':
-      return pool.counts.joinsplits + ' ' + t('joinsplit(s)');
+      return t('{{count}} joinsplit', {count: pool.counts.joinsplits});
     case 'sapling':
-      return pool.counts.spends + ' ' + t('spend(s)') + ', ' + pool.counts.outputs + ' ' + t('output(s)');
+      return t('{{count}} spend', {count: pool.counts.spends}) + ', ' + t('{{count}} output', {count: pool.counts.outputs});
     case 'ironwood':
-      return pool.counts.actions + ' ' + t('action(s)');
+      return t('{{count}} action', {count: pool.counts.actions});
     default:
       return '';
   }
@@ -36,7 +37,7 @@ function poolCountLabel(t, pool) {
 // a single expand toggle rather than replicating that per-section
 // pagination and highlight behavior.
 export default function TxCard({tx, currentAddr}) {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const {getConvertion} = useCurrency();
   const [expanded, setExpanded] = useState(false);
 
@@ -70,12 +71,12 @@ export default function TxCard({tx, currentAddr}) {
         <div className="col-xs-5 col-md-4 text-right text-muted">
           {tx.firstSeenTs && (
             <div>
-              <span>{t('first seen at')}</span> <time>{new Date(tx.firstSeenTs * 1000).toLocaleString()}</time>
+              <span>{t('first seen at')}</span> <time>{new Date(tx.firstSeenTs * 1000).toLocaleString(intlLocale(i18n.language))}</time>
             </div>
           )}
           {tx.blocktime && !tx.firstSeenTs && (
             <div>
-              <span>{t('mined')}</span> <time>{new Date(tx.time * 1000).toLocaleString()}</time>
+              <span>{t('mined')}</span> <time>{new Date(tx.time * 1000).toLocaleString(intlLocale(i18n.language))}</time>
             </div>
           )}
         </div>

@@ -11,18 +11,21 @@ export function roundFloat(x, n) {
 // ARRR/USD rate from the /currency endpoint; until that has loaded, or if
 // the price feed is down (the API reports a rate of 0), amounts are shown
 // in the native unit rather than mislabelled or zeroed as USD.
-export function convert(value, state) {
+//
+// Returns {amount, unit} so callers can style the unit separately; `unit`
+// is '' when the value can't be converted.
+export function convertParts(value, state) {
   if (state.symbol === 'USD' && !(state.factor > 0)) {
-    return convert(value, {...state, symbol: state.netSymbol, factor: 1});
+    return convertParts(value, {...state, symbol: state.netSymbol, factor: 1});
   }
 
   value = value * 1; // Convert to number
 
   if (isNaN(value) || value === null || typeof value === 'undefined') {
-    return 'value error';
+    return {amount: 'value error', unit: ''};
   }
 
-  if (value === 0.0) return '0 ' + state.symbol;
+  if (value === 0.0) return {amount: '0', unit: state.symbol};
 
   let factor = state.factor;
   let response;
@@ -40,7 +43,7 @@ export function convert(value, state) {
   // prevent sci notation
   if (response < 1e-7) response = response.toFixed(8);
 
-  return response + ' ' + state.symbol;
+  return {amount: String(response), unit: state.symbol};
 }
 
 // The unit choices the header's currency menu offers.

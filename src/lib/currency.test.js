@@ -1,5 +1,11 @@
 import {describe, it, expect} from 'vitest';
-import {roundFloat, convert, currencyOptions, normalizeStoredSymbol} from './currency';
+import {roundFloat, convertParts, currencyOptions, normalizeStoredSymbol} from './currency';
+
+// The amount as the page shows it: number, space, unit.
+function convert(value, state) {
+  const {amount, unit} = convertParts(value, state);
+  return unit ? amount + ' ' + unit : amount;
+}
 
 describe('roundFloat', () => {
   it('rounds to n decimal places', () => {
@@ -13,7 +19,7 @@ describe('roundFloat', () => {
   });
 });
 
-describe('convert', () => {
+describe('convertParts, as displayed', () => {
   const netSymbol = 'ARRR';
 
   it('returns "value error" for NaN input', () => {
@@ -74,5 +80,22 @@ describe('normalizeStoredSymbol', () => {
     expect(normalizeStoredSymbol('bits', 'ARRR')).toBe('ARRR');
     expect(normalizeStoredSymbol('KMD', 'ARRR')).toBe('ARRR');
     expect(normalizeStoredSymbol('', 'ARRR')).toBe('ARRR');
+  });
+});
+
+describe('convertParts', () => {
+  const netSymbol = 'ARRR';
+
+  it('separates the amount from the unit', () => {
+    expect(convertParts(0.25, {symbol: netSymbol, factor: 1, netSymbol})).toEqual({amount: '0.25', unit: 'ARRR'});
+    expect(convertParts(2, {symbol: 'USD', factor: 0.12345, netSymbol})).toEqual({amount: '0.25', unit: 'USD'});
+  });
+
+  it('gives zero its unit too', () => {
+    expect(convertParts(0, {symbol: netSymbol, factor: 1, netSymbol})).toEqual({amount: '0', unit: 'ARRR'});
+  });
+
+  it('has no unit for an unconvertible value', () => {
+    expect(convertParts('nope', {symbol: netSymbol, factor: 1, netSymbol})).toEqual({amount: 'value error', unit: ''});
   });
 });

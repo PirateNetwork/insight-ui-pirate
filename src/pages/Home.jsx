@@ -2,12 +2,12 @@ import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useCurrency} from '../context/CurrencyContext';
 import {useRecentActivity} from '../context/RecentActivityContext';
-import {humanSince} from '../lib/time';
+import {humanSince, intlLocale} from '../lib/time';
 import SearchBox from '../components/SearchBox';
 import UpgradeBanner from '../components/UpgradeBanner';
 
 export default function Home() {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const {getConvertion} = useCurrency();
   const {blocks, txs} = useRecentActivity();
 
@@ -36,18 +36,13 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              {!blocks.length && (
-                <tr>
-                  <td colSpan={5}>{t('Waiting for blocks...')}</td>
-                </tr>
-              )}
               {blocks.map((b) => (
                 <tr className="fader" key={b.hash}>
                   <td>
                     <Link to={'/block/' + b.hash}>{b.height}</Link>
                   </td>
                   <td>
-                    <span className="ellipsis">{humanSince(b.time)}</span>
+                    <span className="ellipsis">{humanSince(b.time, intlLocale(i18n.language))}</span>
                   </td>
                   <td className="text-right">{b.txlength}</td>
                   <td className="text-right hidden-xs">
@@ -62,6 +57,7 @@ export default function Home() {
               ))}
             </tbody>
           </table>
+          {!blocks.length && <p className="table-empty">{t('Waiting for blocks...')}</p>}
           <div className="btn-more">
             <Link to="/blocks" className="btn btn-default">
               {t('See all blocks')}
@@ -82,11 +78,6 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              {!txs.length && (
-                <tr>
-                  <td colSpan={2}>{t('Waiting for transactions...')}</td>
-                </tr>
-              )}
               {txs.map((tx) => (
                 <tr className="fader" key={tx.txid}>
                   <td>
@@ -101,14 +92,15 @@ export default function Home() {
               ))}
             </tbody>
           </table>
+          {!txs.length && <p className="table-empty">{t('Waiting for transactions...')}</p>}
         </div>
         <aside className="col-xs-12 col-md-4">
           <div className="side-card">
             <h2>{t('What is Pirate Chain?')}</h2>
             <p className="subIntro">
-              Pirate Chain (ARRR) is a privacy coin which focuses on financial privacy. Pirate Chain (ARRR) is a 100%
-              private cryptocurrency. Pirate Chain cannot be compromised by other users activity on the network where
-              sender and receiver addresses and amounts remain private.
+              {t(
+                'Pirate Chain (ARRR) is a privacy coin which focuses on financial privacy. Pirate Chain (ARRR) is a 100% private cryptocurrency. Pirate Chain cannot be compromised by other users activity on the network where sender and receiver addresses and amounts remain private.'
+              )}
             </p>
             <ul className="side-links">
               <li>

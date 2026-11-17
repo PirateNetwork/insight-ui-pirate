@@ -5,9 +5,10 @@ import {getTransaction} from '../api/transactions';
 import {useCurrency} from '../context/CurrencyContext';
 import CopyButton from '../components/CopyButton';
 import TxCard from '../components/TxCard';
+import {intlLocale} from '../lib/time';
 
 export default function Transaction() {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const {txId} = useParams();
   const navigate = useNavigate();
   const {getConvertion} = useCurrency();
@@ -64,14 +65,14 @@ export default function Transaction() {
                 <td>
                   <strong>{t('Received Time')}</strong>
                 </td>
-                <td className="text-muted text-right">{tx.time ? new Date(tx.time * 1000).toLocaleString() : 'N/A'}</td>
+                <td className="text-muted text-right">{tx.time ? new Date(tx.time * 1000).toLocaleString(intlLocale(i18n.language)) : 'N/A'}</td>
               </tr>
               <tr>
                 <td>
                   <strong>{t('Mined Time')}</strong>
                 </td>
                 <td className="text-muted text-right">
-                  {tx.blocktime ? new Date(tx.blocktime * 1000).toLocaleString() : 'N/A'}
+                  {tx.blocktime ? new Date(tx.blocktime * 1000).toLocaleString(intlLocale(i18n.language)) : 'N/A'}
                 </td>
               </tr>
               <tr>

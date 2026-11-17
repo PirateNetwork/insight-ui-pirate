@@ -2,11 +2,11 @@ import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {getStatus, getSync} from '../api/status';
-import {humanSince} from '../lib/time';
+import {humanSince, intlLocale} from '../lib/time';
 import {useBlockRefresh} from '../hooks/useBlockRefresh';
 
 export default function Status() {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const [sync, setSync] = useState(null);
   const [lastBlock, setLastBlock] = useState(null);
   const [info, setInfo] = useState(null);
@@ -85,7 +85,7 @@ export default function Status() {
                 <td>{t('Start Date')}</td>
                 <td className="text-right">
                   {sync && sync.startTs && (
-                    <time title={new Date(sync.startTs).toLocaleString()}>{humanSince(sync.startTs / 1000)}</time>
+                    <time title={new Date(sync.startTs).toLocaleString(intlLocale(i18n.language))}>{humanSince(sync.startTs / 1000, intlLocale(i18n.language))}</time>
                   )}
                 </td>
               </tr>
@@ -93,7 +93,7 @@ export default function Status() {
                 <tr>
                   <td>{t('Finish Date')}</td>
                   <td className="text-right">
-                    <time title={new Date(sync.endTs).toLocaleString()}>{humanSince(sync.endTs / 1000)}</time>
+                    <time title={new Date(sync.endTs).toLocaleString(intlLocale(i18n.language))}>{humanSince(sync.endTs / 1000, intlLocale(i18n.language))}</time>
                   </td>
                 </tr>
               )}

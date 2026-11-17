@@ -3,6 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {getChainStats} from '../api/status';
 import {getCurrency} from '../api/currency';
 import {formatSolutionRate} from '../lib/format';
+import {intlLocale} from '../lib/time';
 
 const POLL_INTERVAL = 20000;
 
@@ -28,7 +29,8 @@ function round(value, decimals) {
 // reports this node's own wallet), and BTC/KMD cross-rates would need
 // new external price feeds this app doesn't otherwise have.
 export default function Stats() {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
+  const locale = intlLocale(i18n.language);
   const [stats, setStats] = useState(null);
   const [priceUsd, setPriceUsd] = useState(null);
   const [marketCapUsd, setMarketCapUsd] = useState(null);
@@ -83,11 +85,11 @@ export default function Stats() {
                 </tr>
                 <tr>
                   <td>{t('Supply')}</td>
-                  <td className="text-right">{stats.supply != null ? Math.round(stats.supply).toLocaleString() : ''}</td>
+                  <td className="text-right">{stats.supply != null ? Math.round(stats.supply).toLocaleString(locale) : ''}</td>
                 </tr>
                 <tr>
                   <td>{t('Max Supply')}</td>
-                  <td className="text-right">{MAX_SUPPLY.toLocaleString()}</td>
+                  <td className="text-right">{MAX_SUPPLY.toLocaleString(locale)}</td>
                 </tr>
                 <tr>
                   <td>{t('Next Halving')}</td>
@@ -131,7 +133,7 @@ export default function Stats() {
                   <tr>
                     <td>{t('Market Cap (USD)')}</td>
                     <td className="text-right">
-                      {marketCapUsd != null ? '$' + Math.round(marketCapUsd).toLocaleString() : ''}
+                      {marketCapUsd != null ? '$' + Math.round(marketCapUsd).toLocaleString(locale) : ''}
                     </td>
                   </tr>
                 </tbody>

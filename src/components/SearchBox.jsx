@@ -66,14 +66,19 @@ export default function SearchBox({inputId = 'search'}) {
 
   return (
     <form id="search-form" role="search" onSubmit={search}>
-      <div className={'form-group' + (badQuery ? ' has-error' : '')}>
+      <div className={'form-group search-field' + (badQuery ? ' has-error' : '') + (loading ? ' loading' : '')}>
+        <svg className="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="16.5" y1="16.5" x2="21" y2="21" />
+        </svg>
         <input
           id={inputId}
-          type="text"
-          className={'form-control' + (loading ? ' loading' : '')}
+          type="search"
+          className="form-control"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder={t('Search for block, transaction or address')}
+          aria-label={t('Search for block, transaction or address')}
         />
       </div>
       {badQuery && <div className="no_matching text-danger">{t('No matching records found!')}</div>}

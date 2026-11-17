@@ -2,44 +2,43 @@ import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {getPeers} from '../api/status';
 import {groupPeers, NETWORK_TABS} from '../lib/peers';
-import {humanSince} from '../lib/time';
-import CopyButton from '../components/CopyButton';
+import {humanSince, intlLocale} from '../lib/time';
 
 const POLL_INTERVAL = 15000;
 
-function PeerTable({title, peers, emptyText, t}) {
+function PeerTable({title, peers, emptyText, t, locale}) {
   return (
     <div className="m20v">
       <h2>{title}</h2>
       {!peers.length && <p className="text-muted">{emptyText}</p>}
       {!!peers.length && (
-        <table className="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th>{t('Address')}</th>
-              <th>{t('Client')}</th>
-              <th className="text-right">{t('Connected')}</th>
-              <th className="text-right">{t('Starting Height')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {peers.map((peer) => (
-              <tr key={peer.id ?? peer.addr}>
-                <td>
-                  <span className="ellipsis">
-                    {peer.addr}
-                    <CopyButton text={peer.addr} />
-                  </span>
-                </td>
-                <td>
-                  <span className="ellipsis">{peer.subver}</span>
-                </td>
-                <td className="text-right">{peer.conntime ? humanSince(peer.conntime) : ''}</td>
-                <td className="text-right">{peer.startingheight}</td>
+        <div className="table-responsive">
+          <table className="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th>{t('Address')}</th>
+                <th>{t('Client')}</th>
+                <th className="text-right">{t('Connected')}</th>
+                <th className="text-right">{t('Starting Height')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {peers.map((peer) => (
+                <tr key={peer.id ?? peer.addr}>
+                  <td>
+                    {/* One click selects the whole address, ready to copy. */}
+                    <span className="ellipsis peer-addr">{peer.addr}</span>
+                  </td>
+                  <td>
+                    <span className="ellipsis">{peer.subver}</span>
+                  </td>
+                  <td className="text-right">{peer.conntime ? humanSince(peer.conntime, locale) : ''}</td>
+                  <td className="text-right">{peer.startingheight}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
@@ -53,7 +52,8 @@ function PeerTable({title, peers, emptyText, t}) {
 // connected to us, which says nothing about whether their own address
 // accepts incoming connections, so they're broken out separately.
 export default function Peers() {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
+  const locale = intlLocale(i18n.language);
   const [peers, setPeers] = useState(null);
   const [error, setError] = useState(false);
   const [activeTab, setActiveTab] = useState(NETWORK_TABS[0].key);
@@ -109,8 +109,8 @@ export default function Peers() {
 
       {peers !== null && (
         <div className="m20v">
-          <PeerTable title={t('Outbound')} peers={active.outbound} emptyText={t('No outbound peers on this network.')} t={t} />
-          <PeerTable title={t('Inbound')} peers={active.inbound} emptyText={t('No inbound peers on this network.')} t={t} />
+          <PeerTable title={t('Outbound')} peers={active.outbound} emptyText={t('No outbound peers on this network.')} t={t} locale={locale} />
+          <PeerTable title={t('Inbound')} peers={active.inbound} emptyText={t('No inbound peers on this network.')} t={t} locale={locale} />
         </div>
       )}
     </section>

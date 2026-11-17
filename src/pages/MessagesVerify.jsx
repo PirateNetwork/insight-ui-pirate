@@ -123,7 +123,7 @@ export default function MessagesVerify() {
                 {status === 'verified' && !result && <div className="alert alert-danger">{t('The message failed to verify.')}</div>}
                 {status === 'error' && (
                   <div className="alert alert-warning">
-                    <p>{t('An error occured in the verification process.')}</p>
+                    <p>{t('An error occurred in the verification process.')}</p>
                     {error && (
                       <p>
                         <strong>{t('Error message:')}</strong> {JSON.stringify(error)}

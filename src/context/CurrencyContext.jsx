@@ -1,17 +1,33 @@
 import {createContext, useCallback, useContext, useEffect, useState} from 'react';
 import {getCurrency} from '../api/currency';
-import {convert, currencyOptions, normalizeStoredSymbol} from '../lib/currency';
+import {convertParts, currencyOptions, normalizeStoredSymbol} from '../lib/currency';
 
 // Pirate Chain's ticker, used as the native-unit currency option.
 export const NET_SYMBOL = 'ARRR';
 
 const CurrencyContext = createContext(null);
 
+// An amount with its unit set apart (smaller and dimmer, see .amount-unit),
+// so a column of values reads as numbers rather than a run of "ARRR"s.
+function Amount({parts}) {
+  return (
+    <span className="amount">
+      {parts.amount}
+      {parts.unit && (
+        <>
+          {' '}
+          <span className="amount-unit">{parts.unit}</span>
+        </>
+      )}
+    </span>
+  );
+}
+
 export function CurrencyProvider({children}) {
   const [symbol, setSymbol] = useState(() =>
     normalizeStoredSymbol(localStorage.getItem('insight-currency'), NET_SYMBOL)
   );
-  // Only USD uses this (convert() fixes the native and milli units' own
+  // Only USD uses this (convertParts() fixes the native and milli units' own
   // factors); 0 means the USD rate hasn't loaded yet.
   const [factor, setFactor] = useState(0);
   const [bitstamp, setBitstamp] = useState(0);
@@ -61,7 +77,7 @@ export function CurrencyProvider({children}) {
     netSymbol: NET_SYMBOL,
     options: currencyOptions(NET_SYMBOL),
     setCurrency,
-    getConvertion: (v) => convert(v, {symbol, factor, netSymbol: NET_SYMBOL})
+    getConvertion: (v) => <Amount parts={convertParts(v, {symbol, factor, netSymbol: NET_SYMBOL})} />
   };
 
   return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>;

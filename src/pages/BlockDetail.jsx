@@ -4,9 +4,10 @@ import {useTranslation} from 'react-i18next';
 import {getBlock} from '../api/blocks';
 import CopyButton from '../components/CopyButton';
 import TransactionList from '../components/TransactionList';
+import {intlLocale} from '../lib/time';
 
 export default function BlockDetail() {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const {blockHash} = useParams();
   const navigate = useNavigate();
   const [block, setBlock] = useState(null);
@@ -74,7 +75,7 @@ export default function BlockDetail() {
                     <td>
                       <strong>{t('Timestamp')}</strong>
                     </td>
-                    <td className="text-right text-muted">{new Date(block.time * 1000).toLocaleString()}</td>
+                    <td className="text-right text-muted">{new Date(block.time * 1000).toLocaleString(intlLocale(i18n.language))}</td>
                   </tr>
                   {block.poolInfo && block.poolInfo.poolName && (
                     <tr>

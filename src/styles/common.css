@@ -14,10 +14,8 @@
   --pc-text: #e9e6df;
   --pc-text-dim: #a2a6ad;
 
-  /* Brand typography (piratechain.com's branding page): Bai Jamjuree for
-     headings and navigation, Roboto for body text, IBM Plex Mono for
-     hashes and addresses. All three are bundled locally (see main.jsx). */
-  --pc-font-heading: 'Bai Jamjuree', 'Roboto', sans-serif;
+  /* Brand typography: Roboto throughout, IBM Plex Mono for hashes and
+     addresses. Both are bundled locally (see main.jsx). */
   --pc-font-body: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   --pc-font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
 }
@@ -53,8 +51,8 @@ body {
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   color: var(--pc-gold-strong);
-  font-family: var(--pc-font-heading);
-  font-weight: 600;
+  font-family: var(--pc-font-body);
+  font-weight: 500;
   letter-spacing: -0.2px;
 }
 h1, .h1 { font-size: 30px; margin: 8px 0 18px; }
@@ -72,6 +70,22 @@ a {
 
 a:hover, a:focus {
   color: var(--pc-gold-strong);
+}
+
+/* Bootstrap 3 outlines links and buttons on every focus, so a clicked
+   nav link keeps a white box around it. Show a ring for keyboard focus
+   only. */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+.btn:focus:not(:focus-visible),
+.btn:active:focus:not(:focus-visible) {
+  outline: none;
+}
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--pc-gold);
+  outline-offset: 2px;
 }
 
 p, .subIntro, label, .control-label {
@@ -166,16 +180,44 @@ margin-left: 0;
   border-bottom: 1px solid var(--pc-border);
 }
 .table > tbody > tr > td {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  vertical-align: middle;
+}
+
+/* Bootstrap frames a scrolling table in light grey on phones. */
+.table-responsive {
+  border: 0;
+}
+
+.table-empty {
+  color: var(--pc-text-dim);
+  margin: -10px 0 20px;
+  padding: 0 8px;
+}
+
+/* The unit after an amount (CurrencyContext.jsx's Amount), set apart so
+   a column of values reads as numbers. */
+.amount-unit {
+  color: var(--pc-text-dim);
+  font-size: 0.8em;
+  letter-spacing: 0.03em;
+}
+.txvalues .amount-unit,
+.btc-value .amount-unit {
+  color: inherit;
+  opacity: 0.75;
 }
 #home .col-value {
   width: 150px;
 }
-.table > tbody > tr > td, .table > tbody > tr > th,
 .table > thead > tr > td,
 .table > tfoot > tr > td, .table > tfoot > tr > th {
   border-top: 1px solid var(--pc-border);
+}
+/* Rows are told apart by the striping, so no rules between them. */
+.table > tbody > tr > td, .table > tbody > tr > th {
+  border-top: 0;
 }
 .table-striped > tbody > tr:nth-of-type(odd) {
   background-color: var(--pc-bg-elevated);
@@ -298,7 +340,7 @@ margin-left: 0;
 }
 .upgrade-banner strong {
   color: var(--pc-gold-strong);
-  font-weight: 600;
+  font-weight: 500;
 }
 .upgrade-banner-muted {
   color: var(--pc-text-dim);
@@ -314,7 +356,7 @@ margin-left: 0;
 
 .btc-value {
   color: var(--pc-gold-strong);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .navbar { min-height: 64px; }
@@ -338,10 +380,10 @@ margin-left: 0;
 .navbar-default .navbar-nav>li>a,
 .navbar-default .navbar-nav>li>.dropdown-toggle {
   color: var(--pc-text-dim);
-  font-family: var(--pc-font-heading);
+  font-family: var(--pc-font-body);
   font-weight: 500;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 /* Bootstrap darkens a focused nav link to #333 on a light grey
@@ -445,16 +487,56 @@ margin-left: 0;
   padding: 18px 15px;
 }
 
-.navbar-form .form-control {
-  background-color: var(--pc-bg-card);
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border: 1px solid var(--pc-border);
+/* Search: a recessed pill with a magnifier, so it reads as a search box
+   rather than one more item in the navigation. Used in the navbar and
+   on the home page at phone widths (SearchBox.jsx). */
+.search-field {
+  position: relative;
+}
+.search-field .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  fill: none;
+  stroke: var(--pc-gold);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.search-field .form-control {
+  height: 36px;
+  padding-left: 36px;
+  padding-right: 14px;
+  background-color: #0f1019;
+  border: 1px solid #3a3d55;
+  border-radius: 18px;
   color: var(--pc-text);
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.search-field .form-control:focus {
+  border-color: var(--pc-gold);
+  box-shadow: 0 0 0 3px rgba(187, 150, 69, 0.2);
+}
+.search-field.has-error .form-control {
+  border-color: #c9485b;
+}
+.search-field .form-control::placeholder {
+  color: #8a8ea0;
+  font-size: 13px;
+}
+.search-field .form-control::-webkit-search-cancel-button {
+  display: none;
+}
+.search-field.loading .search-icon {
+  display: none;
+}
+.search-field.loading .form-control {
+  background-image: url('/img/loading.gif');
+  background-position: 13px center;
+  background-repeat: no-repeat;
 }
 
 .navbar-nav>li>a {
@@ -464,12 +546,6 @@ margin-left: 0;
 
 #search-form { color: var(--pc-text-dim); }
 
-#search.loading {
-  background-image: url('/img/loading.gif');
-  background-position: 5px center;
-  background-repeat: no-repeat;
-  padding-left: 25px;
-}
 
 .loader-gif {
   display: inline-block;
@@ -479,13 +555,7 @@ margin-left: 0;
   margin-left: 5px;
 }
 
-#search { color: var(--pc-text); }
 
-#search::placeholder {
-  color: var(--pc-text-dim);
-  font-family: var(--pc-font-body);
-  font-size: 13px;
-}
 
 .status {
   display: flex;
@@ -526,6 +596,52 @@ margin-left: 0;
 .side-card > :last-child {
   margin-bottom: 0;
 }
+.side-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 14px;
+}
+.side-title .glyphicon {
+  font-size: 15px;
+  margin-right: 6px;
+  top: 2px;
+}
+.side-date {
+  color: var(--pc-text);
+  margin: 0 0 10px;
+}
+.side-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.side-nav {
+  list-style: none;
+  margin: 0 -8px;
+  padding: 0;
+}
+.side-nav a {
+  display: block;
+  padding: 8px;
+  border-radius: 6px;
+  color: var(--pc-text-dim);
+}
+.side-nav a:hover {
+  background-color: var(--pc-bg-elevated);
+  color: var(--pc-gold-strong);
+  text-decoration: none;
+}
+.side-nav a.active {
+  background-color: var(--pc-bg-elevated);
+  color: var(--pc-gold);
+  font-weight: 500;
+}
+/* Peers: one click selects the whole address for copying. */
+.peer-addr {
+  user-select: all;
+  -webkit-user-select: all;
+}
 .side-links {
   list-style: none;
   margin: 16px 0 0;
@@ -550,39 +666,6 @@ margin-left: 0;
 .line10 {
   border: 1px solid var(--pc-border);
   margin: 10px 0;
-}
-
-.block-id {
-  background-color: var(--pc-bg-elevated);
-  border: 3px solid var(--pc-gold);
-  margin: 0 auto;
-  width: 165px;
-  color: var(--pc-text);
-  text-align: center;
-}
-
-.block-id span {
-  font-size: 40px;
-  margin: 30px 0;
-}
-
-.block-id h2 {
-  color: var(--pc-gold);
-  font-weight: bold;
-  line-height: 30px;
-  font-size: 24px;
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.icon-block {
-  color: var(--pc-gold);
-  font-size: 35px;
-  margin-top:  10px;
-}
-
-.icon-block h3 {
-  color: var(--pc-gold);
 }
 
 .block-tx {
@@ -626,7 +709,7 @@ margin-left: 0;
   background-color: var(--pc-gold);
   border: 1px solid var(--pc-gold);
   color: #14151f;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .btn-success {
@@ -704,9 +787,9 @@ margin-left: 0;
   align-items: center;
   gap: 10px;
   color: var(--pc-gold-strong);
-  font-family: var(--pc-font-heading);
+  font-family: var(--pc-font-body);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
 }
 #footer .footer-brand img {
   height: 22px;
@@ -999,19 +1082,12 @@ a.v_highlight_more {
   .btn-copy {
     display: none;
   }
+  /* Stacked under (home) or above (Blocks, Charts) the main column. */
   .side-card {
-    margin-top: 24px;
+    margin: 24px 0;
   }
   .m50v {
     margin: 15px 0;
-  }
-  .block-id span {
-    font-size: 24px;
-    margin: 10px 0;
-  }
-  .icon-block {
-    font-size: initial;
-    margin: 10px 0;
   }
   h1 {
     font-size: 26px;
@@ -1022,10 +1098,13 @@ a.v_highlight_more {
   h3 {
     font-size: 18px;
   }
-  .navbar-default .navbar-nav>li>a,
-  .navbar-default .navbar-nav>li>.dropdown-toggle {
-    padding-left: 15px;
-    padding-right: 15px;
+}
+
+/* Tablet widths: the links, search and unit menu share one 750px bar, so
+   keep the search compact enough for the longest translated labels. */
+@media (min-width: 768px) and (max-width: 991px) {
+  .navbar-form .form-control {
+    width: 190px;
   }
 }
 
@@ -1052,6 +1131,11 @@ a.v_highlight_more {
     height: 50px;
     padding: 12px 15px;
   }
+  .navbar-default .navbar-nav>li>a,
+  .navbar-default .navbar-nav>li>.dropdown-toggle {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
   #brandImg {
     height: 26px;
   }
@@ -1069,7 +1153,6 @@ a.v_highlight_more {
   .navbar {
     min-height: 50px;
   }
-  #search { color: var(--pc-text); }
   .txvalues {
     display: block;
     margin: 5px;
@@ -1117,7 +1200,7 @@ a.v_highlight_more {
 
 @media (min-width: 1200px) {
   .navbar-form .form-control {
-    width: 260px;
+    width: 285px;
   }
 }
 

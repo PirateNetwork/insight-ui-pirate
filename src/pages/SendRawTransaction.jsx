@@ -79,14 +79,14 @@ export default function SendRawTransaction() {
                 {status === 'loading' && <div>{t('Loading...')}</div>}
                 {status === 'sent' && (
                   <div className="alert alert-success">
-                    {t('Transaction succesfully broadcast.')}
+                    {t('Transaction successfully broadcast.')}
                     <br />
-                    Transaction id: {txid}
+                    {t('Transaction id:')} {txid}
                   </div>
                 )}
                 {status === 'error' && (
                   <div className="alert alert-warning">
-                    {t('An error occured:')}
+                    {t('An error occurred:')}
                     <br />
                     {JSON.stringify(error)}
                   </div>

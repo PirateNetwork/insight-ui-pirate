@@ -12,6 +12,18 @@ const UNITS = [
   ['second', 1]
 ];
 
+// The app's language codes (e.g. 'de_DE', 'id_ID') as BCP 47 tags for
+// Intl ('de-DE', 'id-ID'), so dates and times follow the chosen language.
+// The code comes from the visitor's browser storage, so anything Intl
+// rejects falls back to English rather than throwing during render.
+export function intlLocale(language) {
+  try {
+    return Intl.getCanonicalLocales((language || 'en').replace(/_/g, '-'))[0] || 'en';
+  } catch {
+    return 'en';
+  }
+}
+
 function relativeFromSeconds(diffSeconds, locale) {
   const rtf = new Intl.RelativeTimeFormat(locale || 'en', {numeric: 'auto'});
   const abs = Math.abs(diffSeconds);
@@ -39,7 +51,8 @@ export function humanSinceDay(unixSeconds, locale) {
   const dayMs = 86400000;
   const blockDayStart = Math.floor((unixSeconds * 1000) / dayMs) * dayMs;
   const todayStart = Math.floor(Date.now() / dayMs) * dayMs;
-  return relativeFromSeconds((blockDayStart - todayStart) / 1000, locale);
+  // Elapsed time, like humanSince: positive for a past day.
+  return relativeFromSeconds((todayStart - blockDayStart) / 1000, locale);
 }
 
 // Mirrors legacy StatusController's humanSince (ms-based, from /status

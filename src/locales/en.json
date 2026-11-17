@@ -1,0 +1,14 @@
+{
+  "{{count}} input_one": "{{count}} input",
+  "{{count}} input_other": "{{count}} inputs",
+  "{{count}} output_one": "{{count}} output",
+  "{{count}} output_other": "{{count}} outputs",
+  "{{count}} spend_one": "{{count}} spend",
+  "{{count}} spend_other": "{{count}} spends",
+  "{{count}} action_one": "{{count}} action",
+  "{{count}} action_other": "{{count}} actions",
+  "{{count}} joinsplit_one": "{{count}} JoinSplit",
+  "{{count}} joinsplit_other": "{{count}} JoinSplits",
+  "{{count}} blocks remaining_one": "{{count}} block remaining",
+  "{{count}} blocks remaining_other": "{{count}} blocks remaining"
+}
