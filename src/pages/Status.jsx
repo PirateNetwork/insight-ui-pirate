@@ -48,7 +48,7 @@ export default function Status() {
         <h1>{t('Application Status')}</h1>
       </div>
       <div id="status" className="row">
-        <div className="col-xs-12 col-md-8">
+        <div className="col-xs-12 col-md-7 col-lg-8">
           <h2>{t('Sync Status')}</h2>
           <table className="table">
             <tbody>
@@ -135,7 +135,7 @@ export default function Status() {
           </table>
         </div>
 
-        <aside className="col-xs-12 col-md-4">
+        <aside className="col-xs-12 col-md-5 col-lg-4">
           <div className="side-card">
             <h2>{t('Pirate node information')}</h2>
             <table className="table">
@@ -168,7 +168,11 @@ export default function Status() {
                 </tr>
                 <tr>
                   <td>{t('Mining Difficulty')}</td>
-                  <td className="text-right">{info && info.difficulty}</td>
+                  <td className="text-right">
+                    {info && info.difficulty != null
+                      ? Number(info.difficulty).toLocaleString(intlLocale(i18n.language), {maximumFractionDigits: 2})
+                      : ''}
+                  </td>
                 </tr>
                 <tr>
                   <td>{t('Network')}</td>

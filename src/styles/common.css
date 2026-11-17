@@ -180,9 +180,14 @@ margin-left: 0;
   border-bottom: 1px solid var(--pc-border);
 }
 .table > tbody > tr > td {
+  vertical-align: middle;
+}
+/* Listings (blocks, transactions, peers) are striped and get roomy rows;
+   label/value detail tables (Status, Stats, block and transaction
+   details) keep Bootstrap's compact rows. */
+.table-striped > tbody > tr > td {
   padding-top: 14px;
   padding-bottom: 14px;
-  vertical-align: middle;
 }
 
 /* Bootstrap frames a scrolling table in light grey on phones. */
@@ -215,7 +220,8 @@ margin-left: 0;
 .table > tfoot > tr > td, .table > tfoot > tr > th {
   border-top: 1px solid var(--pc-border);
 }
-/* Rows are told apart by the striping, so no rules between them. */
+/* No rules between table rows: listings are told apart by their striping,
+   and detail tables read cleanly as label/value pairs. */
 .table > tbody > tr > td, .table > tbody > tr > th {
   border-top: 0;
 }
